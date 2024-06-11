@@ -1,5 +1,5 @@
-module.exports.dashboard=(req,res)=>{
+module.exports=(req,res)=>{
     res.render('admin/pages/dashboard/index',{
-        title: 'Dashboard'
-    })
+        title:'Dashboard'
+    });
 }
