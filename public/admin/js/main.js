@@ -1,7 +1,7 @@
 //Button Status
 const listBtnFilter=document.querySelectorAll('[button-status]')
 
-//Bộ lọc
+//Bộ lọc frondend
 if(listBtnFilter.length>0){
     let url= new URL(window.location.href);
 
@@ -9,11 +9,17 @@ if(listBtnFilter.length>0){
         btn.addEventListener('click',(e)=>{
             const status=btn.getAttribute('button-status');
             btn.classList.add('active');
+            if(url.searchParams.get('page')){
+                url.searchParams.delete('page');
+            }
             if(status){
                 url.searchParams.set('status',status);
             }
             else{
                 url.searchParams.delete('status');
+                if(url.searchParams.get('keyword')){
+                    url.searchParams.delete('keyword');
+                }   
             }
             window.location.href=url.href;
         })
@@ -28,7 +34,7 @@ if(listBtnFilter.length>0){
 }
 //End Bộ lọc
 
-//Tìm kiếm
+//Tìm kiếm frontend
 const formSearch=document.querySelector('[form-search]');
 if(formSearch){
     const url= new URL(window.location.href);
@@ -48,3 +54,21 @@ if(formSearch){
  
 }
 //End Tìm kiếm
+
+
+//Phân trang
+const listButtonPagination=document.querySelectorAll('[button-pagination]');
+if(listButtonPagination.length>0){
+    const url=new URL(window.location.href);
+    listButtonPagination.forEach(btn=>{
+        btn.addEventListener('click',(e)=>{
+            let page=btn.getAttribute('button-pagination');
+            if(page!=='1'){
+                url.searchParams.set('page',page);
+            }else{
+                url.searchParams.delete('page');
+            }
+            window.location.href=url.href;
+        })
+    })
+}

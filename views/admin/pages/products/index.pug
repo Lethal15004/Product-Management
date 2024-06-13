@@ -1,4 +1,8 @@
 extends ../../layouts/default.pug
+include ../../mixins/filter-buttons.pug
+include ../../mixins/search-component.pug
+include ../../mixins/list-products.pug
+include ../../mixins/pagination.pug
 block content
     h2 Quản lý sản phẩm
     .card.mb-3
@@ -6,34 +10,11 @@ block content
     .card-body
       .row
         .col-6
-          button(
-            class="btn btn-sm ml-1 btn-outline-success"
-            button-status=""
-          ) Tất cả
-          button(
-            class="btn btn-sm ml-1 btn-outline-success"
-            button-status="active"
-          ) Hoạt động
-          button(
-            class="btn btn-sm ml-1 btn-outline-success"
-            button-status="inactive"
-          ) Dừng hoạt động
+          //- Bộ lọc bên mixins
+          +filter-status(buttonFilters)
         .col-6
-          form(form-search="")
-            .input-group
-              input(
-                id="search-keyword"
-                type="text"
-                placeholder="Nhập từ khóa"
-                name="keyword"
-                class="form-control"
-                value=keyword
-              )
-              .input-group-append
-                button(
-                  class="btn btn-success"
-                  type="submit"
-                ) Tìm
+          //- Tìm kiếm bên mixins
+          +search(keyword)
     .card.mb-3
         .card-header Danh sách
         .card-body
@@ -47,24 +28,9 @@ block content
                     th Trạng thái
                     th Hành động
                 tbody
-                each item, index in Products
-                    tr 
-                    td #{index+1}
-                    td
-                        img(
-                        src=item.thumbnail
-                        alt=item.title
-                        width="80px"
-                        height="auto"
-                        )
-                    td #{item.title}
-                    td #{item.price}$
-                    td
-                        if(item.status == "active")
-                            a(href="#" class="badge badge-success") Hoạt động
-                        else
-                            a(href="#" class="badge badge-danger") Dừng hoạt động
-                    td
-                        button(class="btn btn-warning btn-sm") Sửa
-                        button(class="btn btn-danger btn-sm ml-1") Xóa
+                //- Danh sách sản phẩm bên mixins
+                +listProducts(Products)
+    //- Phân trang bên mixins
+    +pagination(pagination)
+            
                         
