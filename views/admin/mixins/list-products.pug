@@ -1,6 +1,8 @@
 mixin listProducts(Products)
     each item, index in Products
-        tr 
+        tr
+        td
+            input(name="checkItem" type="checkbox")
         td #{index+1}
         td
             img(
@@ -13,9 +15,11 @@ mixin listProducts(Products)
         td #{item.price}$
         td
             if(item.status == "active")
-                a(href="#" class="badge badge-success") Hoạt động
+               button(link=`/${prefixAdmin}/products/change-single-status` class="badge badge-success"
+                    product-id=`${item.id.valueOf()}` product-status=`inactive`) Hoạt động
             else
-                a(href="#" class="badge badge-danger") Dừng hoạt động
+                button(link=`/${prefixAdmin}/products/change-single-status` class="badge badge-danger"
+                      product-id=`${item.id.valueOf()}` product-status=`active`) Dừng hoạt động
         td
             button(class="btn btn-warning btn-sm") Sửa
             button(class="btn btn-danger btn-sm ml-1") Xóa

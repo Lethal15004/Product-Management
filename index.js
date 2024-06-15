@@ -2,7 +2,8 @@ const express = require('express');//Nhúng express vào dự án
 const app = express(); // Khởi tạo ưng dụng web sử dụng express
 const routeClient=require('./routes/client/index.route');//Nhúng route vào dự án
 const adminRoute=require('./routes/admin/index.route');//Nhúng route vào dự án
-const systemConfig=require('./config/system');//Nhúng file cấu hình vào dự án
+const systemConfig=require('./config/system');//Nhúng file cấu hình vào dự án\
+const bodyParser = require('body-parser');//Nhúng body-parser vào dự án
 require('dotenv').config()
 
 //Kết noối database
@@ -16,8 +17,8 @@ database.connect();
 // Chú ý folder .env để chứa các biến môi trường (port, database, secret key, ...)
 app.set('views', './views');
 app.set('view engine', 'pug');
-app.use(express.static('public'))
-
+app.use(express.static('public'));
+app.use(bodyParser.json());
 //Local variable -> Chỉ áp dụng cho file pug
 app.locals.prefixAdmin=systemConfig.prefixAdmin;
 

@@ -3,6 +3,7 @@ include ../../mixins/filter-buttons.pug
 include ../../mixins/search-component.pug
 include ../../mixins/list-products.pug
 include ../../mixins/pagination.pug
+include ../../mixins/box-action.pug
 block content
     h2 Quản lý sản phẩm
     .card.mb-3
@@ -16,18 +17,24 @@ block content
           //- Tìm kiếm bên mixins
           +search(keyword)
     .card.mb-3
+      .card-header Hành động
+      .card-body
+        +boxAction(`/${prefixAdmin}/products/change-multiple-status`)
+    .card.mb-3
         .card-header Danh sách
         .card-body
             table.table.table-hover.table-sm
-                thead
+              thead
                 tr
+                    th
+                      input(name="checkAll" type="checkbox")
                     th STT
                     th Hình ảnh
                     th Tiêu đề
                     th Giá
                     th Trạng thái
                     th Hành động
-                tbody
+              tbody
                 //- Danh sách sản phẩm bên mixins
                 +listProducts(Products)
     //- Phân trang bên mixins

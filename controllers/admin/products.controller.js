@@ -1,6 +1,8 @@
 const Products=require('../../models/admin/product.model');
 const paginationHelper=require('../../helpers/pagination.helper');
-module.exports= async (req,res)=>{
+
+//[GET] /admin/products
+module.exports.index= async (req,res)=>{
     const find={
         deleted:false
     }
@@ -43,4 +45,22 @@ module.exports= async (req,res)=>{
         buttonFilters:buttonFilters,
         pagination:pagination,
     });
+}
+
+//[PATCH] /admin/products/change-single-status
+module.exports.changeSingleStatus=async (req,res)=>{
+    const { id , status }=req.body;
+    await Products.updateOne({_id: id},{status: status});
+    res.json({
+        code:200
+    })
+}
+
+//[PATCH] /admin/products/change-multi-status
+module.exports.changeMultipleStatus=async (req,res)=>{
+    const {ids,status}=req.body;
+    await Products.updateMany({_id:ids},{status:status});
+    res.json({
+        code:200
+    })
 }
