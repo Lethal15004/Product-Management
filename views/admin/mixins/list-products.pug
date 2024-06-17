@@ -12,7 +12,16 @@ mixin listProducts(Products)
             height="auto"
             )
         td #{item.title}
+        td #{item.position}
         td #{item.price}$
+        td
+            input(
+                link=`/${prefixAdmin}/products/changePosition/${item.id}`
+                type="number"
+                value=`${item.position}`
+                style="width: 60px"
+                min='1'
+            )
         td
             if(item.status == "active")
                button(link=`/${prefixAdmin}/products/change-single-status` class="badge badge-success"
@@ -22,4 +31,4 @@ mixin listProducts(Products)
                       product-id=`${item.id.valueOf()}` product-status=`active`) Dừng hoạt động
         td
             button(class="btn btn-warning btn-sm") Sửa
-            button(class="btn btn-danger btn-sm ml-1") Xóa
+            button(class="btn btn-danger btn-sm ml-1" button-delete=`/${prefixAdmin}/products/delete/${item.id}`) Xóa

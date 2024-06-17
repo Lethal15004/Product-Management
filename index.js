@@ -1,14 +1,19 @@
 const express = require('express');//Nhúng express vào dự án
 const app = express(); // Khởi tạo ưng dụng web sử dụng express
+require('dotenv').config()//Nhúng file .env vào dự án
+
+
 const routeClient=require('./routes/client/index.route');//Nhúng route vào dự án
 const adminRoute=require('./routes/admin/index.route');//Nhúng route vào dự án
+
 const systemConfig=require('./config/system');//Nhúng file cấu hình vào dự án\
-const bodyParser = require('body-parser');//Nhúng body-parser vào dự án
-require('dotenv').config()
+const database=require('./config/database');//Nhúng file cấu hình database vào dự án
+database.connect();//Kết nối database
+
+
 
 //Kết noối database
-const database=require('./config/database');
-database.connect();
+
 
 // Chú ý để nhúng file vào dự án thì cần phải sử dụng đúng đường dẫn và require
 // Chú ý đường dẫn cùng cấp thì mặc định bắt đầu là ./ . Từ con ra cha là ../ . 
@@ -18,7 +23,9 @@ database.connect();
 app.set('views', './views');
 app.set('view engine', 'pug');
 app.use(express.static('public'));
+const bodyParser = require('body-parser');//Nhúng body-parser vào dự án
 app.use(bodyParser.json());
+
 //Local variable -> Chỉ áp dụng cho file pug
 app.locals.prefixAdmin=systemConfig.prefixAdmin;
 

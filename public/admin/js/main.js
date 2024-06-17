@@ -160,5 +160,44 @@ if(statusGroup){
          }
         })
     }
-    
 }
+
+// Xử lý xóa mềm sản phẩm 
+const listButtonsDelete=document.querySelectorAll('[button-delete]');
+if(listButtonsDelete.length>0){
+    listButtonsDelete.forEach(btn=>{
+        btn.addEventListener('click',(e)=>{
+            const link = btn.getAttribute('button-delete');
+            fetch(link,{
+                method:'PATCH',
+                headers:{
+                    'Content-Type':'application/json'
+                }
+            })
+            .then(response=>response.json())
+            .then(data=>{
+                if(data.code===200){
+                    window.location.reload();
+                }
+            })
+        })
+    })
+}
+
+//Xử lý thay đổi position
+const listButtonPosition=document.querySelectorAll('input[type=number]');
+listButtonPosition.forEach(btn=>{
+    btn.addEventListener('change',(e)=>{
+        const link=btn.getAttribute('link')+`/${btn.value}`;
+        fetch(link,{
+            method:'PATCH',
+            headers:{
+                'Content-Type':'application/json'
+            }
+        })
+        .then(response=>response.json())
+        .then(data=>{
+            console.log(data);
+        })
+    })
+})
