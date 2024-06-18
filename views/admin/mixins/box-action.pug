@@ -1,13 +1,17 @@
-mixin boxAction(link)
+mixin boxAction(linkFetch,path='')
     div(class="input-group" box-actions)
           select(class="custom-select")
             option(value='') Chọn hành động...
             option(value='active') Hoạt động
             option(value='inactive') Dừng hoạt động
-            option(value='delete') Xóa
+            if(path==='')
+                option(value='delete') Xóa
+            else
+                option(value='restore') Khôi phục
+                option(value='remove') Xóa vĩnh viễn
           .input-group-append
             button(
               class="btn btn-outline-secondary"
               type='button'
-              link=`/${prefixAdmin}/products/change-multiple-status`
+              link=linkFetch
             ) Áp dụng

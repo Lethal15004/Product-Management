@@ -1,4 +1,4 @@
-mixin listProducts(Products)
+mixin listProducts(Products,path='')
     each item, index in Products
         tr
         td
@@ -12,7 +12,6 @@ mixin listProducts(Products)
             height="auto"
             )
         td #{item.title}
-        td #{item.position}
         td #{item.price}$
         td
             input(
@@ -30,5 +29,9 @@ mixin listProducts(Products)
                 button(link=`/${prefixAdmin}/products/change-single-status` class="badge badge-danger"
                       product-id=`${item.id.valueOf()}` product-status=`active`) Dừng hoạt động
         td
-            button(class="btn btn-warning btn-sm") Sửa
-            button(class="btn btn-danger btn-sm ml-1" button-delete=`/${prefixAdmin}/products/delete/${item.id}`) Xóa
+            if(path==='')
+                button(class="btn btn-warning btn-sm") Sửa
+                button(class="btn btn-danger btn-sm ml-1" button-delete=`/${prefixAdmin}/products/delete/${item.id}`) Xóa
+            else
+                button(class="btn btn-warning btn-sm" button-restore=`/${prefixAdmin}/products/restore/${item.id}`) Khôi phục
+                button(class="btn btn-danger btn-sm ml-1" button-remove=`/${prefixAdmin}/products/remove/${item.id}`) Xóa vĩnh viễn

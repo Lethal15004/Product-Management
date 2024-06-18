@@ -46,7 +46,6 @@ if(formSearch){
         {
             url.searchParams.set('keyword',inputElement.value);
         }else{
-            console.log("Vào");
             url.searchParams.delete('keyword');
         }
         window.location.href=url.href;
@@ -206,8 +205,49 @@ listButtonPosition.forEach(btn=>{
 const alertSuccess=document.querySelector('[show-alert]');
 if(alertSuccess){
     const time= Number(alertSuccess.getAttribute('show-alert'))||3000;
-    console.log(time);
     setTimeout(()=>{
         alertSuccess.classList.add('hidden');
     },time)
+}
+
+//Khôi phục 1 sản phẩm
+const listButtonRestore=document.querySelectorAll('[button-restore]');
+if(listButtonRestore.length>0){
+    listButtonRestore.forEach(btn=>{
+        btn.addEventListener('click',(e)=>{
+            const link = btn.getAttribute('button-restore');
+            fetch(link,{
+                method:'PATCH',
+                headers:{
+                    'Content-Type':'application/json'
+                }
+            })
+            .then(response=>response.json())
+            .then(data=>{
+                if(data.code===200)
+                    window.location.reload();
+            })
+        })
+    })
+}
+
+//Xóa vĩnh viễn 1 sản phẩm
+const listButtonRemove=document.querySelectorAll('[button-remove]');
+if(listButtonRemove.length>0){
+    listButtonRemove.forEach(btn=>{
+        btn.addEventListener('click',(e)=>{
+            const link = btn.getAttribute('button-remove');
+            fetch(link,{
+                method:'DELETE',
+                headers:{
+                    'Content-Type':'application/json'
+                }
+            })
+            .then(res=>res.json())
+            .then(data=>{
+                if(data.code===200)
+                    window.location.reload();
+            })
+        })
+    })
 }

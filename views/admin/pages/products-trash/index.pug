@@ -5,9 +5,9 @@ include ../../mixins/list-products.pug
 include ../../mixins/pagination.pug
 include ../../mixins/box-action.pug
 block content
-    -if(messages.success)
+    if(messages.success)
       div(class="alert alert-success show-alert" show-alert="3000") #{messages.success}
-    h2 Quản lý sản phẩm
+    h2 Quản lý sản phẩm bị xóa
     .card.mb-3
     .card-header Bộ lọc và Tìm kiếm
     .card-body
@@ -21,7 +21,7 @@ block content
     .card.mb-3
       .card-header Hành động
       .card-body
-        +boxAction(`/${prefixAdmin}/products/changeProducts`)
+        +boxAction(`/${prefixAdmin}/products/changeProducts`,path)
     .card.mb-3
         .card-header Danh sách
         .card-body
@@ -39,8 +39,6 @@ block content
                     th Hành động
               tbody
                 //- Danh sách sản phẩm bên mixins
-                +listProducts(Products)
+                +listProducts(Products,path)
     //- Phân trang bên mixins
     +pagination(pagination)
-            
-                        

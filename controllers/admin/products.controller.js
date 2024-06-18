@@ -58,8 +58,7 @@ module.exports.changeSingleStatus=async (req,res)=>{
 }
 
 //[PATCH] /admin/products/change-multi-status
-module.exports.changeMultipleAnDeleteProducts=async (req,res)=>{
-    console.log(req.body);
+module.exports.changeProducts=async (req,res)=>{
     const {ids,status}=req.body;
     switch(status){
         case 'active':
@@ -68,6 +67,12 @@ module.exports.changeMultipleAnDeleteProducts=async (req,res)=>{
             break;
         case "delete":
             await Products.updateMany({_id:ids},{deleted:true});
+            break;
+        case "restore":
+            await Products.updateMany({_id:ids},{deleted:false});
+            break;
+        case "remove":
+            await Products.deleteMany({_id:ids});
             break;
         default:
             break;
