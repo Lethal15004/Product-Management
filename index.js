@@ -1,7 +1,9 @@
 const express = require('express');//Nhúng express vào dự án
 const app = express(); // Khởi tạo ưng dụng web sử dụng express
 require('dotenv').config()//Nhúng file .env vào dự án
-
+const flash= require('express-flash');//Nhúng flash vào dự án
+const cookieParser = require('cookie-parser');//Nhúng cookie-parser vào dự án
+const session = require('express-session');//Nhúng express-session vào dự án
 
 const routeClient=require('./routes/client/index.route');//Nhúng route vào dự án
 const adminRoute=require('./routes/admin/index.route');//Nhúng route vào dự án
@@ -12,7 +14,10 @@ database.connect();//Kết nối database
 
 
 
-//Kết noối database
+//Phần flash
+app.use(cookieParser('alert-1x2'));
+app.use(session({ cookie: { maxAge: 60000 }}));
+app.use(flash());
 
 
 // Chú ý để nhúng file vào dự án thì cần phải sử dụng đúng đường dẫn và require

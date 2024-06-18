@@ -51,6 +51,7 @@ module.exports.index= async (req,res)=>{
 module.exports.changeSingleStatus=async (req,res)=>{
     const { id , status }=req.body;
     await Products.updateOne({_id: id},{status: status});
+    req.flash('success','Cập nhật trạng thái thành công');
     res.json({
         code:200
     })
