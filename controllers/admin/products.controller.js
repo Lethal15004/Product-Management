@@ -1,6 +1,7 @@
 const Products=require('../../models/admin/product.model');
 const paginationHelper=require('../../helpers/pagination.helper');
 
+
 //[GET] /admin/products
 module.exports.index= async (req,res)=>{
     const find={
@@ -37,7 +38,7 @@ module.exports.index= async (req,res)=>{
     const listProducts= await Products.find(find).limit(pagination.limitItems).skip(pagination.skip)
                                      .sort({position:"desc"});
     // limit là giới hạn số lượng bản ghi trả về và skip là bỏ qua bao nhiêu bản ghi
-    
+    console.log(listProducts);
     res.render('admin/pages/products/index',{
         title:'Products',
         Products:listProducts,
@@ -123,7 +124,6 @@ module.exports.createProduct=async (req,res)=>{
         req.flash('success','Tạo sản phẩm thành công');
         res.redirect('/admin/products');
     })
-    
 }
 
 
