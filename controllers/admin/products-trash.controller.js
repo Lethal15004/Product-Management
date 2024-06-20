@@ -29,7 +29,7 @@ module.exports.index=async(req,res)=>{
     }
     const pagination=await paginationHelper(req,Products,find);
     const listProducts=await Products.find(find).limit(pagination.limitItems).skip(pagination.skip).sort({position:"asc"})
-    res.render('admin/pages/products-trash/index',{
+    res.render('admin/pages/products/products-trash',{
         title:'Quản lý sản phẩm đã xóa',
         buttonFilters:buttonFilters,
         Products:listProducts,

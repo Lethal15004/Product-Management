@@ -14,21 +14,19 @@ database.connect();//Kết nối database
 
 
 
-//Phần flash
+//Phần flash -> Để hiển thị thông báo (Quan trọng phải có)
 app.use(cookieParser('alert-1x2'));
 app.use(session({ cookie: { maxAge: 60000 }}));
 app.use(flash());
 
-
-// Chú ý để nhúng file vào dự án thì cần phải sử dụng đúng đường dẫn và require
-// Chú ý đường dẫn cùng cấp thì mặc định bắt đầu là ./ . Từ con ra cha là ../ . 
-// Chú ý render thì đường dẫn nó đã mặc định ./view + đường dẫn 
-    // Example: res.render('client/pages/home/index'); sẽ là /views/client/pages/home/index.pug
-// Chú ý folder .env để chứa các biến môi trường (port, database, secret key, ...)
+//Phần view engine -> Để render file pug (Quan trọng phải có)
 app.set('views', './views');
 app.set('view engine', 'pug');
 app.use(express.static('public'));
+
+//Phần body-parser -> Để lấy dữ liệu từ form và fetch (Quan trọng phải có)
 const bodyParser = require('body-parser');//Nhúng body-parser vào dự án
+app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json());
 
 //Local variable -> Chỉ áp dụng cho file pug
@@ -37,6 +35,8 @@ app.locals.prefixAdmin=systemConfig.prefixAdmin;
 routeClient.index(app);
 adminRoute.index(app);
 
+
+//Khởi tạo server (Quan trọng phải có)
 app.listen(process.env.PORT, () => {
     console.log(`Đang lắng nghe cổng http://localhost:${process.env.PORT}`);
 })

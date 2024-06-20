@@ -86,6 +86,7 @@ module.exports.changeProducts=async (req,res)=>{
 module.exports.deleteProduct=async (req,res)=>{
     const {id}=req.params;
     await Products.updateOne({_id:id},{deleted:true});
+    req.flash('success','Xóa sản phẩm thành công');
     res.json({
         code:200
     })
@@ -98,6 +99,31 @@ module.exports.changePosition=async (req,res)=>{
     res.json({
         code:200
     })
+}
+
+module.exports.create=async (req,res)=>{
+    res.render('admin/pages/products/product-create',{
+        title:'Tạo sản phẩm mới'
+    });
+}
+
+module.exports.createProduct=async (req,res)=>{
+    req.body.price=Number(req.body.price);
+    req.body.discountPercentage=Number(req.body.discountPercentage);
+    req.body.stock=Number(req.body.stock);
+    if(req.body.position!==''){
+        req.body.position=Number(req.body.position);
+    }else{
+        const totalProducts=await Products.countDocuments();
+        req.body.position=totalProducts+1;
+    }
+    const newProduct = new Products(req.body);
+    await newProduct.save()
+    .then(()=>{
+        req.flash('success','Tạo sản phẩm thành công');
+        res.redirect('/admin/products');
+    })
+    
 }
 
 

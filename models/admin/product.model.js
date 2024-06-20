@@ -8,7 +8,10 @@ const productsSchema = new mongoose.Schema({
     thumbnail: String,
     status: String,
     position: Number,
-    deleted: Boolean,
+    deleted:{
+        type: Boolean,
+        default: false
+    }
 })
-const Product=mongoose.model('Product',productsSchema,'products');
+const Product= mongoose.model('Product',productsSchema,'products');
 module.exports=Product;
