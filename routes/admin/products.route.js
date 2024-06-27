@@ -1,5 +1,22 @@
 const express = require('express');
 const router=express.Router();
+
+//multer để nhúng file ảnh vào form
+const multer=require('multer');
+//const upload = multer({ dest: './public/admin/uploads'});
+
+const storage=multer.diskStorage({
+    destination:function(req,file,cb){
+        cb(null,'./public/admin/uploads');//Đường dẫn khác so với các đường dẫn đã học
+    },
+    filename: function(req,file,cb){
+        cb(null,`${Date.now()}-${file.originalname}`);
+    }
+
+})
+
+const upload=multer({storage:storage});
+
 const productsController=require('../../controllers/admin/products.controller');
 const productsTrashController=require('../../controllers/admin/products-trash.controller');
 //[GET] 1 page
@@ -18,6 +35,6 @@ router.delete('/remove/:id',productsTrashController.removeProduct)//remove perma
 
 
 //[POST]
-router.post('/create',productsController.createProduct)//create a product;
+router.post('/create',upload.single("thumbnail"),productsController.createProduct)//create a product;
 
 module.exports=router;

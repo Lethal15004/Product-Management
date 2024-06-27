@@ -69,6 +69,11 @@
   padding: 15px;
 }
 
+.product-item .inner-content a{
+  text-decoration: none;
+  color: black;
+}
+
 .product-item .inner-content .inner-title {
   font-size: 20px;
   font-weight: 600;
@@ -95,5 +100,18 @@
   display: inline-block;
   padding: 3px 10px;
   border-radius: 8px;
+}
+.container .row:nth-child(2){
+    display: flex;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+}
+.container .row:nth-child(2) .col-4{
+  flex-basis: 25%;  /* 25% chiều rộng trừ đi khoảng cách giữa các sản phẩm */
+  box-sizing: border-box;
+  padding: 10px;
+  background-color: #f0f0f0;
+  text-align: center;
+  margin: 5px 0;
 }
 /* End product-item */

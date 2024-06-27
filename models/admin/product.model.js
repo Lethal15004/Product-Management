@@ -13,7 +13,7 @@ const productsSchema = new mongoose.Schema({
     position: Number,
     slug:{
         type:String,
-        slug:"title",
+        slug:"title",// Tạo slug từ trường title
         unique:true
     },
     deleted:{

@@ -6,7 +6,6 @@
   top: 0;
       z-index: 999;
   }
-  
   .header .inner-logo a {
   font-size: 24px;
   font-weight: 700;
@@ -15,6 +14,7 @@
   /* End Header */
   
   /* Body */
+
   .body .sider {
   width: 150px;
   background: #323232;
@@ -31,6 +31,7 @@
   left: 150px;
   width: calc(100% - 180px);
   }
+
   /* End Body */
   
   /* Sider */
@@ -57,4 +58,11 @@
   
   .show-alert.hidden {
     display: none;
+  }
+
+
+  .button-trash{
+    position: absolute;
+    bottom: 5px;
+    right: 20px;
   }

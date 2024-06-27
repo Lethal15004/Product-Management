@@ -5,7 +5,8 @@ include ../../mixins/list-products.pug
 include ../../mixins/pagination.pug
 include ../../mixins/box-action.pug
 block content
-    -if(messages.success)
+    a(href="/admin/products/trash") <button type="button" class="btn btn-secondary button-trash"><i class="fa-solid fa-trash"></i> Thùng rác </button>
+    if(messages.success)
       div(class="alert alert-success show-alert" show-alert="3000") #{messages.success}
     h2 Quản lý sản phẩm
     .card.mb-3

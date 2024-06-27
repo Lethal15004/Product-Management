@@ -26,8 +26,8 @@ app.use(express.static('public'));
 
 //Phần body-parser -> Để lấy dữ liệu từ form và fetch (Quan trọng phải có)
 const bodyParser = require('body-parser');//Nhúng body-parser vào dự án
-app.use(bodyParser.urlencoded({ extended: false }))
-app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }))//Nhận dữ liệu từ form
+app.use(bodyParser.json());//Nhận dữ liệu từ fetch
 
 //Local variable -> Chỉ áp dụng cho file pug
 app.locals.prefixAdmin=systemConfig.prefixAdmin;

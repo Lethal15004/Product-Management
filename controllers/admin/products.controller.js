@@ -36,9 +36,8 @@ module.exports.index= async (req,res)=>{
     const pagination = await paginationHelper(req,Products,find);
 
     const listProducts= await Products.find(find).limit(pagination.limitItems).skip(pagination.skip)
-                                     .sort({position:"desc"});
+                                     .sort({position:"asc"});
     // limit là giới hạn số lượng bản ghi trả về và skip là bỏ qua bao nhiêu bản ghi
-    console.log(listProducts);
     res.render('admin/pages/products/index',{
         title:'Products',
         Products:listProducts,
@@ -109,6 +108,9 @@ module.exports.create=async (req,res)=>{
 }
 
 module.exports.createProduct=async (req,res)=>{
+    if(req.file && req.file.filename){
+        req.body.thumbnail=`/admin/uploads/${req.file.filename}`;
+    }
     req.body.price=Number(req.body.price);
     req.body.discountPercentage=Number(req.body.discountPercentage);
     req.body.stock=Number(req.body.stock);

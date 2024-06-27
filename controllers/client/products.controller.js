@@ -12,3 +12,14 @@ module.exports.index= async (req,res)=>{
         listProducts:listProducts
     })
 }
+
+module.exports.detail= async (req,res)=>{
+    const find={
+        status:'active',
+        deleted:false
+    }
+    find.slug=req.params.slug;
+    const product= await Products.findOne(find);
+    console.log(product);
+    res.send('OKE');
+}
