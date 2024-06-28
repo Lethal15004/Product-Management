@@ -3,26 +3,23 @@ const router=express.Router();
 
 //multer để nhúng file ảnh vào form
 const multer=require('multer');
-//const upload = multer({ dest: './public/admin/uploads'});
-
-const storage=multer.diskStorage({
-    destination:function(req,file,cb){
-        cb(null,'./public/admin/uploads');//Đường dẫn khác so với các đường dẫn đã học
-    },
-    filename: function(req,file,cb){
-        cb(null,`${Date.now()}-${file.originalname}`);
-    }
-
-})
-
+    //const upload = multer({ dest: './public/admin/uploads'});
+const storage=require('../../helpers/storageMulter.helper');
 const upload=multer({storage:storage});
 
+//Products controller
 const productsController=require('../../controllers/admin/products.controller');
 const productsTrashController=require('../../controllers/admin/products-trash.controller');
+
+
+//Product validations
+const productValidation=require('../../validations/admin/product.validation');
+
 //[GET] 1 page
 router.get('/',productsController.index);//page list all products
 router.get('/trash',productsTrashController.index);//page list all products in trash
 router.get('/create',productsController.create);//page create a product
+router.get('/pageChangeProduct/:id',productsController.pageChangeProduct);//page change a product
 //[PATCH]
 router.patch('/change-single-status', productsController.changeSingleStatus);//change status of a single product
 router.patch('/changeProducts', productsController.changeProducts);//change status of multiple products
@@ -35,6 +32,6 @@ router.delete('/remove/:id',productsTrashController.removeProduct)//remove perma
 
 
 //[POST]
-router.post('/create',upload.single("thumbnail"),productsController.createProduct)//create a product;
+router.post('/create',upload.single("thumbnail"),productValidation.validation,productsController.createProduct)//validation and create a product;
 
 module.exports=router;

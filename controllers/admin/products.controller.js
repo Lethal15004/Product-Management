@@ -36,7 +36,7 @@ module.exports.index= async (req,res)=>{
     const pagination = await paginationHelper(req,Products,find);
 
     const listProducts= await Products.find(find).limit(pagination.limitItems).skip(pagination.skip)
-                                     .sort({position:"asc"});
+                                     .sort({position:"desc"});
     // limit là giới hạn số lượng bản ghi trả về và skip là bỏ qua bao nhiêu bản ghi
     res.render('admin/pages/products/index',{
         title:'Products',
@@ -101,12 +101,14 @@ module.exports.changePosition=async (req,res)=>{
     })
 }
 
+//[GET] /admin/products/create
 module.exports.create=async (req,res)=>{
     res.render('admin/pages/products/product-create',{
         title:'Tạo sản phẩm mới'
     });
 }
 
+//[POST] /admin/products/create
 module.exports.createProduct=async (req,res)=>{
     if(req.file && req.file.filename){
         req.body.thumbnail=`/admin/uploads/${req.file.filename}`;
@@ -125,6 +127,14 @@ module.exports.createProduct=async (req,res)=>{
     .then(()=>{
         req.flash('success','Tạo sản phẩm thành công');
         res.redirect('/admin/products');
+    })
+}
+
+//[GET] /admin/products/pageChangeProduct/:id
+module.exports.pageChangeProduct=async (req,res)=>{
+    console.log(req.params.id);
+    res.render('admin/pages/products/product-change',{
+        title:'Chỉnh sửa sản phẩm',
     })
 }
 
