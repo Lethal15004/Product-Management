@@ -21,9 +21,9 @@ app.use(session({ cookie: { maxAge: 60000 }}));
 app.use(flash());
 
 //Phần view engine -> Để render file pug (Quan trọng phải có)
-app.set('views', './views');
+app.set('views', `${__dirname}/views`);
 app.set('view engine', 'pug');
-app.use(express.static('public'));
+app.use(express.static(`${__dirname}/public`));//Định tuyến file tĩnh (Quan trọng phải có)
 
 //Phần body-parser -> Để lấy dữ liệu từ form và fetch (Quan trọng phải có)
 const bodyParser = require('body-parser');//Nhúng body-parser vào dự án
