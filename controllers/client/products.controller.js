@@ -20,6 +20,13 @@ module.exports.detail= async (req,res)=>{
     }
     find.slug=req.params.slug;
     const product= await Products.findOne(find);
-    console.log(product);
-    res.send('OKE');
+    if(product){
+        res.render('client/pages/products/detail',{
+            title:'Chi tiết sản phẩm',
+            product:product
+        })
+    }else{
+        req.flash('error','Không tìm thấy sản phẩm');
+        res.redirect('/products');
+    }
 }
