@@ -93,9 +93,7 @@ if(listBtnChangeStatus.length>0){
             })
             .then(response=>response.json())
             .then(data=>{
-                if(data.code===200){
-                    window.location.reload();
-                }
+                window.location.reload();
             })
         })
     })
@@ -152,9 +150,7 @@ if(statusGroup){
             })
             .then(response=>response.json())
             .then(data=>{
-                if(data.code===200){
-                        window.location.reload();
-                }
+                window.location.reload();
              })
          }
         })
@@ -175,9 +171,7 @@ if(listButtonsDelete.length>0){
             })
             .then(response=>response.json())
             .then(data=>{
-                if(data.code===200){
-                    window.location.reload();
-                }
+                window.location.reload();
             })
         })
     })
@@ -196,7 +190,7 @@ listButtonPosition.forEach(btn=>{
         })
         .then(response=>response.json())
         .then(data=>{
-            console.log(data);
+            window.location.reload();
         })
     })
 })

@@ -1,6 +1,7 @@
 const express = require('express');//Nhúng express vào dự án
 const app = express(); // Khởi tạo ưng dụng web sử dụng express
 require('dotenv').config()//Nhúng file .env vào dự án
+const methodOverride = require('method-override') //Nhúng method-override vào dự án
 const flash= require('express-flash');//Nhúng flash vào dự án
 const cookieParser = require('cookie-parser');//Nhúng cookie-parser vào dự án
 const session = require('express-session');//Nhúng express-session vào dự án
@@ -28,6 +29,11 @@ app.use(express.static('public'));
 const bodyParser = require('body-parser');//Nhúng body-parser vào dự án
 app.use(bodyParser.urlencoded({ extended: false }))//Nhận dữ liệu từ form
 app.use(bodyParser.json());//Nhận dữ liệu từ fetch
+
+
+//Phần method-override -> Để sử dụng PUT và DELETE cho form (Quan trọng phải có)
+app.use(methodOverride('_method'))
+
 
 //Local variable -> Chỉ áp dụng cho file pug
 app.locals.prefixAdmin=systemConfig.prefixAdmin;
