@@ -220,7 +220,6 @@ module.exports.pageDetailProduct=async (req,res)=>{
         _id:id,
         deleted:false
        })
-       console.log(product);
        if(product){
          res.render('admin/pages/products/product-detail',{
             title:'Thông tin chi tiết sản phẩm',
