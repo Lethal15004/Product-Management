@@ -1,11 +1,11 @@
 const express = require('express');
 const router=express.Router();
 
+
 //multer để nhúng file ảnh vào form
 const multer=require('multer');
-    //const upload = multer({ dest: './public/admin/uploads'});
-const storage=require('../../helpers/storageMulter.helper');
-const upload=multer({storage:storage});
+const upload=multer();
+
 
 //Products controller
 const productsController=require('../../controllers/admin/products.controller');
@@ -13,6 +13,11 @@ const productsTrashController=require('../../controllers/admin/products-trash.co
 
 //Product validations
 const productValidation=require('../../validations/admin/product.validation');
+
+//Product middleware
+const uploadCloud=require('../../middleware/admin/uploadCloudinary.middleware');
+
+
 
 //[GET] 1 page
 router.get('/',productsController.index);//page list all products
@@ -27,13 +32,23 @@ router.patch('/changeProducts', productsController.changeProducts);//change stat
 router.patch('/delete/:id',productsController.deleteProduct)//delete a product
 router.patch('/changePosition/:id/:position',productsController.changePosition)//change position of a product
 router.patch('/restore/:id',productsTrashController.restoreProduct)//restore a product
-router.patch('/changeProduct/:id',upload.single("thumbnail"),productValidation.validation,productsController.changeProduct)//change a product
+router.patch('/changeProduct/:id',
+              upload.single("thumbnail"),
+              uploadCloud.uploadSingle,
+              productValidation.validation,
+              productsController.changeProduct
+            )//change a product
 
 //[DELETE]
 router.delete('/remove/:id',productsTrashController.removeProduct)//remove permanent a product
 
 
 //[POST]
-router.post('/create',upload.single("thumbnail"),productValidation.validation,productsController.createProduct)//validation and create a product;
+router.post(
+    '/create',upload.single("thumbnail"),
+    uploadCloud.uploadSingle,
+    productValidation.validation,
+    productsController.createProduct
+    )//validation and create a product;
 
 module.exports=router;

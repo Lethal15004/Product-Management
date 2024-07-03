@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const moment = require('moment-timezone');
+const moment = require('moment-timezone');//chưa sử dụng
 const slug = require('mongoose-slug-updater');
 mongoose.plugin(slug);
 const productsSchema = new mongoose.Schema({

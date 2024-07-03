@@ -140,9 +140,6 @@ module.exports.create=async (req,res)=>{
 
 //[POST] /admin/products/create
 module.exports.createProduct=async (req,res)=>{
-    if(req.file && req.file.filename){
-        req.body.thumbnail=`/admin/uploads/${req.file.filename}`;
-    }
     req.body.price=Number(req.body.price);
     req.body.discountPercentage=Number(req.body.discountPercentage);
     req.body.stock=Number(req.body.stock);
