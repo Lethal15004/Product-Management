@@ -184,10 +184,7 @@ module.exports.pageChangeProduct=async (req,res)=>{
 //[PATCH] /admin/products/changeProduct/:id
 module.exports.changeProduct=async (req,res)=>{
     try {
-        const id= req.params.id
-        if(req.file && req.file.filename){
-            req.body.thumbnail=`/admin/uploads/${req.file.filename}`;
-        }
+        const id= req.params.id;
         req.body.price=Number(req.body.price);
         req.body.discountPercentage=Number(req.body.discountPercentage);
         req.body.stock=Number(req.body.stock);
