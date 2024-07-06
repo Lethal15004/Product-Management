@@ -1,3 +1,4 @@
+//Start: Products
 //Button Status
 const listBtnFilter=document.querySelectorAll('[button-status]')
 
@@ -180,8 +181,11 @@ if(listButtonsDelete.length>0){
 //Xử lý thay đổi position
 const listButtonPosition=document.querySelectorAll('input[type=number]');
 listButtonPosition.forEach(btn=>{
+    let link;
     btn.addEventListener('change',(e)=>{
-        const link=btn.getAttribute('link')+`/${btn.value}`;
+        link=btn.getAttribute('link')+`/${btn.value}`;
+    })
+    btn.addEventListener('blur',(e)=>{
         fetch(link,{
             method:'PATCH',
             headers:{
@@ -193,6 +197,7 @@ listButtonPosition.forEach(btn=>{
             window.location.reload();
         })
     })
+
 })
 
 //Ẩn alert
@@ -289,3 +294,22 @@ if(buttonSortClear){
         }
     })
 }
+//End: Products
+
+//Start: Products Category
+const listBtnChangeStatusCategory=document.querySelectorAll('[button-change-status]');
+listBtnChangeStatusCategory.forEach(btn=>{
+    btn.addEventListener('click',(e)=>{ 
+        const link = btn.getAttribute('link');
+        fetch(link,{
+            method:'PATCH',
+            headers:{
+                'Content-Type':'application/json'
+            }
+        })
+        .then(response=>response.json())
+        .then(data=>{
+            window.location.reload();
+        })
+    })
+})
