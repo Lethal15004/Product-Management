@@ -1,9 +1,8 @@
 extends ../../layouts/default.pug
-block content
-    h1(class="mb-4") #{title}
-
+block content 
+    h2(class="mb-4") #{title}
     form(
-        action=`/${prefixAdmin}/products/create`
+        action=`/${prefixAdmin}/products-category/create`
         method="POST"
         enctype="multipart/form-data"
     )
@@ -17,59 +16,39 @@ block content
                 required
             )
         div(class="form-group")
+            label(for="parent_id") Danh mục cha
+            input(
+                type="text"
+                class="form-control"
+                id="parent_id"
+                name="parent_id"
+            )
+        div(class="form-group")
             label(for="desc") Mô tả
             textarea(
+                type="text"
                 class="form-control"
                 id="desc"
-                rows="5"
                 name="description"
+                rows="5"
                 textEditor-tinymce
             )
-        div(class="form-group")
-            label(for="price") Giá
-            input(
-                type="number"
-                class="form-control"
-                id="price"
-                name="price"
-                value="0"
-                min="0"
-            )
-        div(class="form-group")
-            label(for="discount") % Giảm giá
-            input(
-                type="number"
-                class="form-control"
-                id="discount"
-                name="discountPercentage"
-                value="0"
-                min="0"
-            )
-        div(class="form-group")
-            label(for="stock") Số lượng
-            input(
-                type="number"
-                class="form-control"
-                id="stock"
-                name="stock"
-                value="0"
-                min="0"
-            )
-        div(class="form-group" upload-image)
+        div(
+            class="form-group"
+            upload-image
+        )
             label(for="thumbnail") Ảnh
             input(
                 type="file"
                 class="form-control-file"
                 id="thumbnail"
                 name="thumbnail"
-                accept='image/*'
+                accept="image/*"
                 upload-image-input
             )
             img(
-                id="thumbnailPreview"
-                class="mt-2"
                 src=""
-                alt=""
+                class="image-preview"
                 upload-image-preview
             )
         div(class="form-group")

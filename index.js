@@ -1,5 +1,6 @@
 const express = require('express');//Nhúng express vào dự án
 const app = express(); // Khởi tạo ưng dụng web sử dụng express
+const path = require('path');//Nhúng path vào dự án
 require('dotenv').config()//Nhúng file .env vào dự án
 const methodOverride = require('method-override') //Nhúng method-override vào dự án
 const flash= require('express-flash');//Nhúng flash vào dự án
@@ -33,6 +34,10 @@ app.use(bodyParser.json());//Nhận dữ liệu từ fetch
 
 //Phần method-override -> Để sử dụng PUT và DELETE cho form (Quan trọng phải có)
 app.use(methodOverride('_method'))
+
+//Phần tinymce -> Để sử dụng trình soạn thảo tinymce (Quan trọng phải có)
+app.use('/tinymce', express.static(path.join(__dirname, 'node_modules', 'tinymce')));
+
 
 
 //Local variable -> Chỉ áp dụng cho file pug

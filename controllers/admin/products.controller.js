@@ -7,6 +7,7 @@ module.exports.index= async (req,res)=>{
     const find={
         deleted:false
     }
+    const sort={}
     const buttonFilters=[
         {
             status:"",
@@ -32,11 +33,19 @@ module.exports.index= async (req,res)=>{
         find.status=req.query.status;
     }
 
+    //Sắp xếp theo tiêu chí
+    if(req.query.sortKey&&req.query.sortValue){
+        sort[req.query.sortKey]=req.query.sortValue;
+    }else{
+        sort['position']='desc';
+    }
+
+
     //Phân trang backend
     const pagination = await paginationHelper(req,Products,find);
-
+    
     const listProducts= await Products.find(find).limit(pagination.limitItems).skip(pagination.skip)
-                                     .sort({position:"desc"});
+                                     .sort(sort);
     // limit là giới hạn số lượng bản ghi trả về và skip là bỏ qua bao nhiêu bản ghi
     res.render('admin/pages/products/index',{
         title:'Products',

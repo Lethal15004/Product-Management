@@ -261,3 +261,31 @@ if(uploadImage){
         })
     }
 }
+
+//Sắp xếp sản phẩm theo tiêu chí
+const sortElement=document.querySelector('[sort-select]');
+const buttonSortClear=document.querySelector('[sort-clear]');
+if(sortElement&&buttonSortClear){
+    const url =new URL(window.location.href);
+    sortElement.addEventListener('change',(e)=>{
+        const [sortKey,sortValue]=sortElement.value.split('-');
+        console.log(sortKey,sortValue);
+        url.searchParams.set('sortKey',sortKey);
+        url.searchParams.set('sortValue',sortValue);
+        window.location.href=url.href;
+    })
+    if(url.searchParams.get('sortKey')&&url.searchParams.get('sortValue')){
+        const optionAttribute=`${url.searchParams.get('sortKey')}-${url.searchParams.get('sortValue')}`;
+        const optionElement=sortElement.querySelector(`option[value="${optionAttribute}"]`);
+        optionElement.selected=true;
+    } 
+}
+if(buttonSortClear){
+    buttonSortClear.addEventListener('click',(e)=>{
+        if(url.searchParams.get('sortKey')&&url.searchParams.get('sortValue')){
+            url.searchParams.delete('sortKey');
+            url.searchParams.delete('sortValue');
+            window.location.href=url.href;
+        }
+    })
+}
