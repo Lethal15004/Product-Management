@@ -1,0 +1,9 @@
+mixin select-tree(categories,level=1)
+    - const gap = ('--').repeat(level)
+    if(categories.length > 0)
+        each category in categories
+            option(
+                value=category.id
+            )  #{gap} #{category.title}
+            if(category.children)
+                +select-tree(category.children,level+1)

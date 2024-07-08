@@ -13,6 +13,7 @@ const uploadCloud=require('../../middleware/admin/uploadCloudinary.middleware');
 router.get('/',productsCategoryController.index);
 router.get('/create',productsCategoryController.createPage);
 router.get('/detail/:id',productsCategoryController.detailCategory);
+router.get('/edit/:id',productsCategoryController.editCategory);
 //[POST]
 router.post('/create',upload.single('thumbnail'),uploadCloud.uploadSingle,validationProduct.validation,productsCategoryController.createCategory);
 

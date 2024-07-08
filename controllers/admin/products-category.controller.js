@@ -1,5 +1,7 @@
 const productsCategory=require('../../models/admin/product-category.model');
 const systemConfig=require('../../config/system');
+const createTreeHelper=require('../../helpers/createTreRecursion.helper');
+
 
 module.exports.index=async (req,res)=>{
     const find={
@@ -14,9 +16,15 @@ module.exports.index=async (req,res)=>{
 
 module.exports.createPage=async (req,res)=>{
     const categories=await productsCategory.find();
+
+   
+
+    const newCategories = createTreeHelper(categories);
+
+
     res.render(`${systemConfig.prefixAdmin}/pages/products-category/products-category-create`,{
         title:'Thêm mới danh mục sản phẩm',
-        categories:categories
+        categories:newCategories
     })
 }
 
@@ -78,7 +86,6 @@ module.exports.detailCategory=async (req,res)=>{
         }else{
             record.parent_name='Không có danh mục cha';
         }
-        console.log(record);
         res.render(`${systemConfig.prefixAdmin}/pages/products-category/products-category-detail`,{
             title:'Chi tiết danh mục sản phẩm',
             record:record
@@ -88,4 +95,11 @@ module.exports.detailCategory=async (req,res)=>{
         res.redirect(`/${systemConfig.prefixAdmin}/products-category`);
     }
    
+}
+
+module.exports.editCategory=async (req,res)=>{
+    console.log(req.params.id);
+    res.render(`${systemConfig.prefixAdmin}/pages/products-category/products-category-edit`,{
+        title:'Chỉnh sửa danh mục sản phẩm'
+    })
 }
