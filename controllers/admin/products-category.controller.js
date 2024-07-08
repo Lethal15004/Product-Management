@@ -15,13 +15,8 @@ module.exports.index=async (req,res)=>{
 }
 
 module.exports.createPage=async (req,res)=>{
-    const categories=await productsCategory.find();
-
-   
-
+    const categories=await productsCategory.find({deleted:false});
     const newCategories = createTreeHelper(categories);
-
-
     res.render(`${systemConfig.prefixAdmin}/pages/products-category/products-category-create`,{
         title:'Thêm mới danh mục sản phẩm',
         categories:newCategories
@@ -79,7 +74,7 @@ module.exports.removeCategory=async (req,res)=>{
 module.exports.detailCategory=async (req,res)=>{
     try {
         const id = req.params.id;
-        const record=await productsCategory.findOne({_id:id});
+        const record=await productsCategory.findOne({_id:id,deleted:false});
         if(record.parent_id!==''){
             const record_parent=await productsCategory.findOne({_id:record.parent_id});
             record.parent_name=record_parent.title;
@@ -97,9 +92,39 @@ module.exports.detailCategory=async (req,res)=>{
    
 }
 
-module.exports.editCategory=async (req,res)=>{
-    console.log(req.params.id);
-    res.render(`${systemConfig.prefixAdmin}/pages/products-category/products-category-edit`,{
-        title:'Chỉnh sửa danh mục sản phẩm'
+module.exports.pageEditCategory=async (req,res)=>{
+    try {
+        const id = req.params.id;
+        const categoryFind=await productsCategory.findOne({_id:id,deleted:false});
+        const categories=await productsCategory.find({deleted:false});
+        const newCategories= createTreeHelper(categories);
+        res.render(`${systemConfig.prefixAdmin}/pages/products-category/products-category-edit`,{
+            title:'Chỉnh sửa danh mục sản phẩm',
+            categories:newCategories,
+            categoryFind:categoryFind
     })
+    } catch (error) {
+        req.flash('error','ID danh mục không tồn tại hoặc đã bị xóa');
+        res.redirect(`/${systemConfig.prefixAdmin}/products-category`);
+    }
+    
+}
+
+module.exports.editCategory=async (req,res)=>{
+    try {
+        console.log(req.body)
+        const id = req.params.id;
+        if(req.body.position!==''){
+            req.body.position=Number(req.body.position);
+        }else{
+            const count = await productsCategory.countDocuments();
+            req.body.position=count+1;
+        }
+        await productsCategory.updateOne({_id:id},req.body);
+        req.flash('success','Cập nhật danh mục thành công');
+        res.redirect(`back`);
+    } catch (error) {
+        req.flash('error','ID danh mục không tồn tại hoặc đã bị xóa');
+        res.redirect(`back`);
+    }
 }

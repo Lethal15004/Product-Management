@@ -13,7 +13,7 @@ const uploadCloud=require('../../middleware/admin/uploadCloudinary.middleware');
 router.get('/',productsCategoryController.index);
 router.get('/create',productsCategoryController.createPage);
 router.get('/detail/:id',productsCategoryController.detailCategory);
-router.get('/edit/:id',productsCategoryController.editCategory);
+router.get('/edit/:id',productsCategoryController.pageEditCategory);
 //[POST]
 router.post('/create',upload.single('thumbnail'),uploadCloud.uploadSingle,validationProduct.validation,productsCategoryController.createCategory);
 
@@ -22,4 +22,5 @@ router.post('/create',upload.single('thumbnail'),uploadCloud.uploadSingle,valida
 router.patch('/change-single-status/:id/:status',productsCategoryController.changeSingleStatus);
 router.patch('/change-position/:id/:position',productsCategoryController.changePosition);
 router.patch('/remove/:id',productsCategoryController.removeCategory);
+router.patch('/edit/:id',upload.single('thumbnail'),uploadCloud.uploadSingle,validationProduct.validation,productsCategoryController.editCategory);
 module.exports=router;
