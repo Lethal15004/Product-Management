@@ -1,16 +1,18 @@
 const productsCategory=require('../../models/admin/product-category.model');
 const systemConfig=require('../../config/system');
 const createTreeHelper=require('../../helpers/createTreRecursion.helper');
-
+const paginationHelper=require('../../helpers/pagination.helper')
 
 module.exports.index=async (req,res)=>{
     const find={
         deleted:false
     }
-    const records=await productsCategory.find(find);
+    const pagination = await paginationHelper(req,productsCategory,find);
+    const records=await productsCategory.find(find).limit(pagination.limitItems).skip(pagination.skip);
     res.render(`${systemConfig.prefixAdmin}/pages/products-category/index`,{
         title:'Danh mục sản phẩm',
-        records:records
+        records:records,
+        pagination:pagination
     })
 }
 
@@ -75,16 +77,19 @@ module.exports.detailCategory=async (req,res)=>{
     try {
         const id = req.params.id;
         const record=await productsCategory.findOne({_id:id,deleted:false});
-        if(record.parent_id!==''){
-            const record_parent=await productsCategory.findOne({_id:record.parent_id});
-            record.parent_name=record_parent.title;
+        if(record){
+            if(record.parent_id!==''){
+                const record_parent=await productsCategory.findOne({_id:record.parent_id});
+                record.parent_name=record_parent.title;
+            }
+            res.render(`${systemConfig.prefixAdmin}/pages/products-category/products-category-detail`,{
+                title:'Chi tiết danh mục sản phẩm',
+                record:record
+            })
         }else{
-            record.parent_name='Không có danh mục cha';
+            req.flash('error','Không tìm thấy danh mục hoặc danh mục đã bị xóa');
+            res.redirect(`/${systemConfig.prefixAdmin}/products-category`);
         }
-        res.render(`${systemConfig.prefixAdmin}/pages/products-category/products-category-detail`,{
-            title:'Chi tiết danh mục sản phẩm',
-            record:record
-        })
     } catch (error) {
         req.flash('error','ID danh mục không tồn tại hoặc đã bị xóa');
         res.redirect(`/${systemConfig.prefixAdmin}/products-category`);
@@ -97,12 +102,19 @@ module.exports.pageEditCategory=async (req,res)=>{
         const id = req.params.id;
         const categoryFind=await productsCategory.findOne({_id:id,deleted:false});
         const categories=await productsCategory.find({deleted:false});
-        const newCategories= createTreeHelper(categories);
-        res.render(`${systemConfig.prefixAdmin}/pages/products-category/products-category-edit`,{
-            title:'Chỉnh sửa danh mục sản phẩm',
-            categories:newCategories,
-            categoryFind:categoryFind
-    })
+        if(categories && categoryFind)
+        {
+            const newCategories= createTreeHelper(categories);
+            res.render(`${systemConfig.prefixAdmin}/pages/products-category/products-category-edit`,{
+                title:'Chỉnh sửa danh mục sản phẩm',
+                categories:newCategories,
+                categoryFind:categoryFind
+            })
+        }else{
+            req.flash('error','Không tìm thấy danh mục hoặc danh mục đã bị xóa');
+            res.redirect(`/${systemConfig.prefixAdmin}/products-category`);
+        }
+        
     } catch (error) {
         req.flash('error','ID danh mục không tồn tại hoặc đã bị xóa');
         res.redirect(`/${systemConfig.prefixAdmin}/products-category`);
@@ -112,7 +124,6 @@ module.exports.pageEditCategory=async (req,res)=>{
 
 module.exports.editCategory=async (req,res)=>{
     try {
-        console.log(req.body)
         const id = req.params.id;
         if(req.body.position!==''){
             req.body.position=Number(req.body.position);

@@ -7,4 +7,4 @@ mixin select-tree(categories,level=1,id='')
                 selected=(id==category.id?true:false)
             )  #{gap} #{category.title}
             if(category.children)
-                +select-tree(category.children,level+1)
+                +select-tree(category.children,level+1,id)

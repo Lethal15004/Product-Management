@@ -1,5 +1,7 @@
 const Products=require('../../models/admin/product.model');
+const productsCategory=require('../../models/admin/product-category.model');
 const paginationHelper=require('../../helpers/pagination.helper');
+const createTreeHelper=require('../../helpers/createTreRecursion.helper.js');
 const system=require('../../config/system.js');
 
 //[GET] /admin/products
@@ -142,8 +144,11 @@ module.exports.changePosition=async (req,res)=>{
 
 //[GET] /admin/products/create
 module.exports.create=async (req,res)=>{
+    const categories= await productsCategory.find({deleted:false});
+    const newCategories= createTreeHelper(categories);
     res.render('admin/pages/products/product-create',{
-        title:'Tạo sản phẩm mới'
+        title:'Tạo sản phẩm mới',
+        categories:newCategories
     });
 }
 
@@ -173,10 +178,13 @@ module.exports.pageChangeProduct=async (req,res)=>{
             _id:req.params.id,
             deleted:false
         })
+        const categories= await productsCategory.find({deleted:false});
+        const newCategories= createTreeHelper(categories);
         if(product){
             res.render('admin/pages/products/product-change',{
                 title:'Chỉnh sửa sản phẩm',
-                product:product
+                product:product,
+                categories:newCategories,
             })
         }
         else{
@@ -223,6 +231,10 @@ module.exports.pageDetailProduct=async (req,res)=>{
         _id:id,
         deleted:false
        })
+       if(product.product_category_id){
+            const category =await productsCategory.findOne({_id:product.product_category_id,deleted:false});
+            product.category=category.title;
+       }
        if(product){
          res.render('admin/pages/products/product-detail',{
             title:'Thông tin chi tiết sản phẩm',
