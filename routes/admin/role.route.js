@@ -11,7 +11,9 @@ const uploadCloud=require('../../middleware/admin/uploadCloudinary.middleware');
 
 //[GET]
 router.get('/',roleController.index);
+router.get('/create',roleController.createPage);
 
-
+//[POST]
+router.post('/create',validationProduct.validation,roleController.createRole);
 
 module.exports=router;
