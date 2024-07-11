@@ -1,4 +1,4 @@
-const createTree=(categories,parentId ='')=>{ //Đệ quy
+const createTree=(categories,parentId ='')=>{ //Đệ quy tạo danh mục
     const newArray=[];
     categories.forEach(category=>{
         if(category.parent_id === parentId ){

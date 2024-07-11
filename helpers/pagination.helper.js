@@ -1,4 +1,4 @@
-module.exports = async (req,Products,find)=>{
+module.exports = async (req,Products,find)=>{ // Hàm phân trang
     //Phân trang 
     const pagination={
         currentPage:1,

@@ -2,7 +2,7 @@ extends ../../layouts/default.pug
 block content
   h2(class="mb-4") #{title}
   form(
-    action=`/${prefixAdmin}/roles/create`
+    action=`/${prefixAdmin}/roles/edit/${role.id}?_method=PATCH`
     method="POST"
   )
     div(class="form-group")
@@ -13,6 +13,7 @@ block content
         id="title"
         name="title"
         required
+        value=role.title
       )
     div(class="form-group")
       label(for="desc") Mô tả
@@ -21,9 +22,10 @@ block content
         class="form-control"
         id="desc"
         name="description"
+        value=role.description
       )
     div(class="form-group")
       button(
         type="submit"
         class="btn btn-primary"
-      ) Tạo mới
+      ) Cập nhật

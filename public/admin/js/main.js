@@ -313,3 +313,53 @@ listBtnChangeStatusCategory.forEach(btn=>{
         })
     })
 })
+//End: Products Category
+
+
+//Start: Phân quyền
+const tablePermissions=document.querySelector('[table-permissions]');
+const btnUpdatePermissions=document.querySelector('[button-submit]');
+if(tablePermissions&&btnUpdatePermissions){
+    const link = btnUpdatePermissions.getAttribute('button-submit');
+    btnUpdatePermissions.addEventListener('click',(e)=>{
+        const roleDataPermission=[]
+        const rolesID=tablePermissions.querySelectorAll('[role-id]');
+        [...rolesID].forEach(role=>{
+            const roleData={}
+            roleData.id=role.getAttribute('role-id');
+            
+            const inputPermissions=tablePermissions.querySelectorAll(`input[data-id="${roleData.id}"]:checked`)
+            roleData.permissions=[...inputPermissions].map(input=>input.getAttribute('data-name'));
+            roleDataPermission.push(roleData);
+        })
+        fetch(link,{
+            method:'PATCH',
+            headers:{
+                'Content-Type':'application/json'
+            },
+            body:JSON.stringify(roleDataPermission)
+        })
+        .then(response=>response.json())
+        .then(data=>{
+            if(data.code===200){
+                Swal.fire({
+                    position: "center",
+                    icon: "success",
+                    title: data.message,
+                    showConfirmButton: false,
+                    timer: 1500
+                });
+            }else{
+                Swal.fire({
+                    icon: "error",
+                    title: "Lỗi.",
+                    text: data.message,
+                    footer: '<a href="#">Why do I have this issue?</a>'
+                });
+            }
+        })
+    })
+
+
+    
+}
