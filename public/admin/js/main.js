@@ -260,7 +260,6 @@ if(uploadImage){
         inputImage.addEventListener('change',(e)=>{
             const [file]=inputImage.files;
             if(file){
-                console.log(URL.createObjectURL(file));
                 previewImage.src=URL.createObjectURL(file);
             }
         })
