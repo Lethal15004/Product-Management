@@ -171,8 +171,26 @@ if(listButtonsDelete.length>0){
                 }
             })
             .then(response=>response.json())
-            .then(data=>{
-                window.location.reload();
+            .then(async (data)=>{
+                if(data.code===200)
+                {
+                    await Swal.fire({
+                        position: "center",
+                        icon: "success",
+                        title: data.message,
+                        showConfirmButton: false,
+                        timer: 1500
+                    });
+                    window.location.reload();
+                }else{
+                    await Swal.fire({
+                        icon: "error",
+                        title: "Lỗi.",
+                        text: data.message,
+                        footer: '<a href="#">Why do I have this issue?</a>'
+                    });
+                    window.location.reload();
+                }
             })
         })
     })
