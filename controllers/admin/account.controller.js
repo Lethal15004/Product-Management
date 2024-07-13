@@ -84,3 +84,20 @@ module.exports.editAccount=async (req,res)=>{
         res.redirect('back');
     }
 }
+
+module.exports.changeSingleStatus=async (req,res)=>{
+    try {
+        const{status,id}=req.params;
+        await Account.updateOne({_id:id},{status:status});
+        res.json({
+            code:200,
+            message:"Thay đổi trạng thái thành công"
+        })
+    } catch (error) {
+        res.json({
+            code:500,
+            message:"Thay đổi trạng thái thất bại"
+        })
+    }
+    
+}

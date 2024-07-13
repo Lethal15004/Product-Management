@@ -39,16 +39,18 @@ block content
               td #{account.email}
               td
                 if (account.status === "active")
-                  a(
-                    href="javascript:;"
+                  button(
                     class="badge badge-success"
                     data-status="active"
+                    button-change-status
+                    link=`/${prefixAdmin}/accounts/changeSingleStatus/inactive/${account.id}`
                   ) Hoạt động
                 else
-                  a(
-                    href="javascript:;"
+                  button(
                     class="badge badge-danger"
                     data-status="inactive"
+                    button-change-status
+                    link=`/${prefixAdmin}/accounts/changeSingleStatus/active/${account.id}`
                   ) Dừng hoạt động
               td
                 a(

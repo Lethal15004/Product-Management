@@ -14,6 +14,7 @@ router.get('/edit/:id',accountController.editPage);
 
 router.patch('/remove/:id',accountController.removeAccount);
 router.patch('/edit/:id',upload.single('avatar'),uploadCloud.uploadSingle,accountController.editAccount);
+router.patch('/changeSingleStatus/:status/:id',accountController.changeSingleStatus);
 router.post('/create',upload.single('avatar'),uploadCloud.uploadSingle,accountController.createAccount);
 
 module.exports=router;
