@@ -5,11 +5,13 @@ const productCategoryRoute=require('./products-category.route');
 const rolesRoute=require('./role.route');
 const accountsRoute=require('./account.route');
 const authRoute=require('./auth.route');
+
+const middlewareAuth=require('../../middleware/admin/auth.middleware');
 module.exports.index=(app)=>{
-    app.use(`/${adminConfig.prefixAdmin}/dashboard`,dashboardRoute);
-    app.use(`/${adminConfig.prefixAdmin}/products`,productsRoute);
-    app.use(`/${adminConfig.prefixAdmin}/products-category`,productCategoryRoute);
-    app.use(`/${adminConfig.prefixAdmin}/roles`,rolesRoute);
-    app.use(`/${adminConfig.prefixAdmin}/accounts`,accountsRoute);
+    app.use(`/${adminConfig.prefixAdmin}/dashboard`,middlewareAuth,dashboardRoute);
+    app.use(`/${adminConfig.prefixAdmin}/products`,middlewareAuth,productsRoute);
+    app.use(`/${adminConfig.prefixAdmin}/products-category`,middlewareAuth,productCategoryRoute);
+    app.use(`/${adminConfig.prefixAdmin}/roles`,middlewareAuth,rolesRoute);
+    app.use(`/${adminConfig.prefixAdmin}/accounts`,middlewareAuth,accountsRoute);
     app.use(`/${adminConfig.prefixAdmin}/auth`,authRoute);
 }

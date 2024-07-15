@@ -27,3 +27,8 @@ module.exports.loginAccount=async (req,res)=>{
     res.cookie('token',account.token,{httpOnly: true});
     res.redirect('/admin/dashboard');
 }
+
+module.exports.logoutAccount=async (req,res)=>{
+    res.clearCookie('token');
+    res.redirect('/admin/auth/login');
+}

@@ -10,4 +10,6 @@ router.get('/login',authController.loginPage);
 
 router.post('/login',authController.loginAccount);
 
+router.get('/logout',authController.logoutAccount);
+
 module.exports=router;
