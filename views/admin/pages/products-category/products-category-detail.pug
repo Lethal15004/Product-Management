@@ -1,27 +1,28 @@
 extends ../../layouts/default.pug
-block content 
-    if(record.title)
-        h2(class="mb-4") #{record.title}
-    if(record.parent_name)
-        div(class="mb-4") Danh mục: #{record.parent_name}
+block content
+    if(roleUser.permissions.includes('products-category_view'))
+        if(record.title)
+            h2(class="mb-4") #{record.title}
+        if(record.parent_name)
+            div(class="mb-4") Danh mục: #{record.parent_name}
 
-    if (record.thumbnail)
-        div(class="mb-4")
-        img(
-            src=record.thumbnail
-            style="width: 300px"
-        )
+        if (record.thumbnail)
+            div(class="mb-4")
+            img(
+                src=record.thumbnail
+                style="width: 300px"
+            )
 
-    if (record.status)
-        div(class="mb-4")
-        span Trạng thái:
-        if (record.status === "active")
-            span(class="badge badge-success") Hoạt động
-        else
-            span(class="badge badge-danger") Dừng hoạt động
+        if (record.status)
+            div(class="mb-4")
+            span Trạng thái:
+            if (record.status === "active")
+                span(class="badge badge-success") Hoạt động
+            else
+                span(class="badge badge-danger") Dừng hoạt động
 
-    if (record.position)
-        div(class="mb-4") Vị trí: <b>#{record.position}</b>
+        if (record.position)
+            div(class="mb-4") Vị trí: <b>#{record.position}</b>
 
-    if (record.description)
-        div(class="mb-4") !{record.description}
+        if (record.description)
+            div(class="mb-4") !{record.description}

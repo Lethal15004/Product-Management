@@ -26,50 +26,73 @@ module.exports.createPage=async (req,res)=>{
 }
 
 module.exports.createCategory=async (req,res)=>{
-    if(req.body.position!==''){
-        req.body.position=Number(req.body.position);
+    if(res.locals.roleUser.permissions.includes('products-category_create')){
+        if(req.body.position!==''){
+            req.body.position=Number(req.body.position);
+        }else{
+            const countProducts=await productsCategory.countDocuments();
+            req.body.position=countProducts+1;
+        }
+        const newCategory= new productsCategory(req.body);
+        await newCategory.save()
+        .then(()=>{
+            req.flash('success','Tạo danh mục thành công');
+            res.redirect(`/${systemConfig.prefixAdmin}/products-category`);
+        })
     }else{
-        const countProducts=await productsCategory.countDocuments();
-        req.body.position=countProducts+1;
+        res.send('403');   
     }
-    const newCategory= new productsCategory(req.body);
-    await newCategory.save()
-    res.redirect(`/${systemConfig.prefixAdmin}/products-category`);
+   
 }
 
-module.exports.changeSingleStatus=async (req,res)=>{    
-    try {
-        const {id,status}=req.params;
-        await productsCategory.updateOne({_id:id},{status:status});
-        req.flash('success','Cập nhật trạng thái thành công');
-        res.json({code:200});
-    } catch (error) {
-        req.flash('error','ID danh mục không tồn tại hoặc đã bị xóa');
-        res.json({code:400});
+module.exports.changeSingleStatus=async (req,res)=>{   
+    if(res.locals.roleUser.permissions.includes('products-category_edit')){
+        try {
+            const {id,status}=req.params;
+            await productsCategory.updateOne({_id:id},{status:status});
+            req.flash('success','Cập nhật trạng thái thành công');
+            res.json({code:200});
+        } catch (error) {
+            req.flash('error','ID danh mục không tồn tại hoặc đã bị xóa');
+            res.json({code:400});
+        }
+    }else{
+        res.send('403');
     }
+    
 }
 
 module.exports.changePosition=async (req,res)=>{
-    try {
-        const {id,position}=req.params;
-        await productsCategory.updateOne({_id:id},{position:position});
-        req.flash('success','Cập nhật vị trí thành công');
-        res.json({code:200});
-    } catch (error) {
-        req.flash('error','ID danh mục không tồn tại hoặc đã bị xóa');
-        res.json({code:400});
+    if(res.locals.roleUser.permissions.includes('products-category_edit')){
+        try {
+            const {id,position}=req.params;
+            await productsCategory.updateOne({_id:id},{position:position});
+            req.flash('success','Cập nhật vị trí thành công');
+            res.json({code:200});
+        } catch (error) {
+            req.flash('error','ID danh mục không tồn tại hoặc đã bị xóa');
+            res.json({code:400});
+        }
+    }else{
+        res.send('403');
     }
+    
 }
 
 module.exports.removeCategory=async (req,res)=>{
-    try {
-        const id = req.params.id;
-        await productsCategory.updateOne({_id:id},{deleted:true});
-        req.flash('success','Xóa danh mục thành công');
-        res.json({code:200});
-    } catch (error) {
-        req.flash('error','ID danh mục không tồn tại hoặc đã bị xóa');
-        res.json({code:400});
+    if(res.locals.roleUser.permissions.includes('products-category_delete')){
+        try {
+            const id = req.params.id;
+            await productsCategory.updateOne({_id:id},{deleted:true});
+            req.flash('success','Xóa danh mục thành công');
+            res.json({code:200});
+        } catch (error) {
+            req.flash('error','ID danh mục không tồn tại hoặc đã bị xóa');
+            res.json({code:400});
+        }
+    }
+    else{
+        res.send('403');
     }
 }
 
@@ -123,19 +146,24 @@ module.exports.pageEditCategory=async (req,res)=>{
 }
 
 module.exports.editCategory=async (req,res)=>{
-    try {
-        const id = req.params.id;
-        if(req.body.position!==''){
-            req.body.position=Number(req.body.position);
-        }else{
-            const count = await productsCategory.countDocuments();
-            req.body.position=count+1;
+    if(res.locals.roleUser.permissions.includes('products-category_edit')){
+        try {
+            const id = req.params.id;
+            if(req.body.position!==''){
+                req.body.position=Number(req.body.position);
+            }else{
+                const count = await productsCategory.countDocuments();
+                req.body.position=count+1;
+            }
+            await productsCategory.updateOne({_id:id},req.body);
+            req.flash('success','Cập nhật danh mục thành công');
+            res.redirect(`back`);
+        } catch (error) {
+            req.flash('error','ID danh mục không tồn tại hoặc đã bị xóa');
+            res.redirect(`back`);
         }
-        await productsCategory.updateOne({_id:id},req.body);
-        req.flash('success','Cập nhật danh mục thành công');
-        res.redirect(`back`);
-    } catch (error) {
-        req.flash('error','ID danh mục không tồn tại hoặc đã bị xóa');
-        res.redirect(`back`);
+    }else{
+        res.send('403');
     }
+
 }

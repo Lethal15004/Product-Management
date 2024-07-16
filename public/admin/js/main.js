@@ -395,6 +395,5 @@ if(tablePermissions&&btnUpdatePermissions){
         })
     })
 
-
-    
 }
+

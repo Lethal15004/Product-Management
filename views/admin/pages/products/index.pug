@@ -5,65 +5,70 @@ include ../../mixins/list-products.pug
 include ../../mixins/pagination.pug
 include ../../mixins/box-action.pug
 block content
-    a(href="/admin/products/trash") <button type="button" class="btn btn-secondary button-trash"><i class="fa-solid fa-trash"></i> Thùng rác </button>
-    h2 Quản lý sản phẩm
-    .card.mb-3
-    .card-header Bộ lọc và Tìm kiếm
-    .card-body
-      .row
-        .col-6
-          //- Bộ lọc bên mixins
-          +filter-status(buttonFilters)
-        .col-6
-          //- Tìm kiếm bên mixins
-          +search(keyword)
-    .card.mb-3
-      .card-header Hành động
-      .card-body
-        +boxAction(`/${prefixAdmin}/products/changeProducts`)
-    .card.mb-3
-      .card-header Sắp xếp
+    if(roleUser.permissions.includes('products_view'))
+      if(roleUser.permissions.includes('products_edit'))
+        a(href="/admin/products/trash") <button type="button" class="btn btn-secondary button-trash"><i class="fa-solid fa-trash"></i> Thùng rác </button>
+      h2 Quản lý sản phẩm
+      .card.mb-3
+      .card-header Bộ lọc và Tìm kiếm
       .card-body
         .row
-          .col-5
-            div(sort)
-              select(
-                class="form-control"
-                name="sort"
-                sort-select
-              )
-                option(value="position-desc" ) Vị trí giảm dần
-                option(value="position-asc") Vị trí tăng dần
-                option(value="price-desc") Giá giảm dần
-                option(value="price-asc") Giá tăng dần
-                option(value="title-asc") Tiêu đề A - Z
-                option(value="title-desc") Tiêu đề Z - A
-              button(
-                class="btn btn-danger mt-2"
-                sort-clear
-              ) Clear
-    .card.mb-3
-        .card-header Danh sách
+          .col-6
+            //- Bộ lọc bên mixins
+            +filter-status(buttonFilters)
+          .col-6
+            //- Tìm kiếm bên mixins
+            +search(keyword)
+      if(roleUser.permissions.includes('products_edit'))
+        .card.mb-3
+          .card-header Hành động
+          .card-body
+            +boxAction(`/${prefixAdmin}/products/changeProducts`)
+      .card.mb-3
+        .card-header Sắp xếp
         .card-body
-          div(class="text-right mb2")
-            a(href=`/${prefixAdmin}/products/create` class="btn btn-outline-success") Thêm mới
-        .card-body
-            table.table.table-hover.table-sm
-              thead
-                tr
-                    th
-                      input(name="checkAll" type="checkbox")
-                    th STT
-                    th Hình ảnh
-                    th Tiêu đề
-                    th Giá
-                    th Vị trí
-                    th Trạng thái
-                    th Hành động
-              tbody
-                //- Danh sách sản phẩm bên mixins
-                +listProducts(Products)
-    //- Phân trang bên mixins
-    +pagination(pagination)
+          .row
+            .col-5
+              div(sort)
+                select(
+                  class="form-control"
+                  name="sort"
+                  sort-select
+                )
+                  option(value="position-desc" ) Vị trí giảm dần
+                  option(value="position-asc") Vị trí tăng dần
+                  option(value="price-desc") Giá giảm dần
+                  option(value="price-asc") Giá tăng dần
+                  option(value="title-asc") Tiêu đề A - Z
+                  option(value="title-desc") Tiêu đề Z - A
+                button(
+                  class="btn btn-danger mt-2"
+                  sort-clear
+                ) Clear
+      .card.mb-3
+          .card-header Danh sách
+          if(roleUser.permissions.includes('products_create'))
+            .card-body
+              div(class="text-right mb2")
+                a(href=`/${prefixAdmin}/products/create` class="btn btn-outline-success") Thêm mới
+              table.table.table-hover.table-sm
+                thead
+                  tr
+                      th
+                        input(name="checkAll" type="checkbox")
+                      th STT
+                      th Hình ảnh
+                      th Tiêu đề
+                      th Giá
+                      if(roleUser.permissions.includes('products_edit'))
+                        th Vị trí
+                      if(roleUser.permissions.includes('products_edit'))
+                        th Trạng thái
+                      th Hành động
+                tbody
+                  //- Danh sách sản phẩm bên mixins
+                  +listProducts(Products)
+      //- Phân trang bên mixins
+      +pagination(pagination)
             
                         

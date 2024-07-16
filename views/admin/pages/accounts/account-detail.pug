@@ -1,0 +1,13 @@
+extends ../../layouts/default.pug
+block content
+    if(roleUser.permissions.includes("accounts_view"))
+        if(account.fullName)
+            div Họ tên: <b>#{account.fullName}</b>
+        if(account.email)
+            div Email: #{account.email}
+        if(account.phone)
+            div SĐT: #{account.phone}
+        if(account.avatar)
+            img(src=account.avatar, alt="avatar" width="150" height="150")
+        if(role.title)
+            div Nhóm quyền: <b>#{role.title}</b>

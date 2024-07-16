@@ -16,6 +16,7 @@ module.exports.index=async (req,res)=>{
         accounts:accounts
     })
 }
+
 module.exports.createPage=async (req,res)=>{
     const roles=await Role.find({deleted:false}).select('title');
     res.render(`${systemConfig.prefixAdmin}/pages/accounts/account-create`,{
@@ -25,29 +26,39 @@ module.exports.createPage=async (req,res)=>{
 }
 
 module.exports.createAccount=async (req,res)=>{
-    req.body.password=md5(req.body.password);
-    req.body.token=generateTokenHelper.generateRandomString(30);
-    const  newAccount=new Account(req.body);
-    await newAccount.save()
-    .then(()=>{
-        req.flash('success','Thêm tài khoản thành công');
-        res.redirect('/admin/accounts');
-    })
+    if(res.locals.roleUser.permissions.includes('accounts_create')){
+        req.body.password=md5(req.body.password);
+        req.body.token=generateTokenHelper.generateRandomString(30);
+        const  newAccount=new Account(req.body);
+        await newAccount.save()
+        .then(()=>{
+            req.flash('success','Thêm tài khoản thành công');
+            res.redirect('/admin/accounts');
+        })
+    }else{
+        res.send('403');
+    }
+   
 }
 module.exports.removeAccount=async (req,res)=>{
-    try {
-        const id =req.params.id;
-        await Account.updateOne({_id:id},{deleted:true});
-        res.json({
-            code:200,
-            message:"Xóa tài khoản thành công"
-        })
-    } catch (error) {
-        res.json({
-            code:500,
-            message:"Xóa tài khoản thất bại"
-        })
+    if(res.locals.roleUser.permissions.includes('accounts_delete')){
+        try {
+            const id =req.params.id;
+            await Account.updateOne({_id:id},{deleted:true});
+            res.json({
+                code:200,
+                message:"Xóa tài khoản thành công"
+            })
+        } catch (error) {
+            res.json({
+                code:500,
+                message:"Xóa tài khoản thất bại"
+            })
+        }
+    }else{
+        res.send('403');
     }
+    
 }
 module.exports.editPage= async (req,res)=>{
     try {
@@ -69,35 +80,62 @@ module.exports.editPage= async (req,res)=>{
     
 }
 module.exports.editAccount=async (req,res)=>{
-    try {
-        const id=req.params.id;
-        if(req.body.password===''){
-            delete req.body.password;
-        }else{
-            req.body.password=md5(req.body.password);
+    if(res.locals.roleUser.permissions.includes('accounts_edit')){
+        try {
+            const id=req.params.id;
+            if(req.body.password===''){
+                delete req.body.password;
+            }else{
+                req.body.password=md5(req.body.password);
+            }
+            await Account.updateOne({_id:id},req.body);
+            req.flash('success','Chỉnh sửa tài khoản thành công');
+            res.redirect('back');
+        } catch (error) {
+            req.flash('error','Chỉnh sửa tài khoản thất bại');
+            res.redirect('back');
         }
-        await Account.updateOne({_id:id},req.body);
-        req.flash('success','Chỉnh sửa tài khoản thành công');
-        res.redirect('back');
-    } catch (error) {
-        req.flash('error','Chỉnh sửa tài khoản thất bại');
-        res.redirect('back');
+    }else{
+        res.send('403');
     }
+ 
 }
 
 module.exports.changeSingleStatus=async (req,res)=>{
+    if(res.locals.roleUser.permissions.includes('accounts_edit')){
+        try {
+            const{status,id}=req.params;
+            await Account.updateOne({_id:id},{status:status});
+            res.json({
+                code:200,
+                message:"Thay đổi trạng thái thành công"
+            })
+        } catch (error) {
+            res.json({
+                code:500,
+                message:"Thay đổi trạng thái thất bại"
+            })
+        }    
+    }else{
+        res.send('403');
+    }
+}
+
+
+module.exports.detailPage=async (req,res)=>{
     try {
-        const{status,id}=req.params;
-        await Account.updateOne({_id:id},{status:status});
-        res.json({
-            code:200,
-            message:"Thay đổi trạng thái thành công"
+        const id =req.params.id;
+        const account = await Account.findOne({
+            _id: id,
+            deleted: false}).select('fullName email phone avatar role_id');
+        const role = await Role.findById(account.role_id).select('title');
+        res.render(`${systemConfig.prefixAdmin}/pages/accounts/account-detail`,{
+            title:'Chi tiết tài khoản',
+            account: account,
+            role:role
         })
     } catch (error) {
-        res.json({
-            code:500,
-            message:"Thay đổi trạng thái thất bại"
-        })
+        req.flash('error','Tài khoản không tồn tại');
+        res.redirect('/admin/accounts');
     }
-    
 }

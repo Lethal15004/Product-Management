@@ -13,28 +13,32 @@ mixin listProducts(Products,path='')
             )
         td #{item.title}
         td #{item.price}$
-        td
-            input(
-                link=`/${prefixAdmin}/products/changePosition/${item.id}`
-                type="number"
-                value=`${item.position}`
-                style="width: 60px"
-                min='1'
-            )
-        td
-            if(item.status == "active")
-               button(link=`/${prefixAdmin}/products/change-single-status` class="badge badge-success"
-                    product-id=`${item.id.valueOf()}` product-status=`inactive`) Hoạt động
-            else
-                button(link=`/${prefixAdmin}/products/change-single-status` class="badge badge-danger"
-                      product-id=`${item.id.valueOf()}` product-status=`active`) Dừng hoạt động
+        if(roleUser.permissions.includes('products_edit'))
+            td
+                input(
+                    link=`/${prefixAdmin}/products/changePosition/${item.id}`
+                    type="number"
+                    value=`${item.position}`
+                    style="width: 60px"
+                    min='1'
+                )
+        if(roleUser.permissions.includes('products_edit'))
+            td
+                if(item.status == "active")
+                    button(link=`/${prefixAdmin}/products/change-single-status` class="badge badge-success"
+                            product-id=`${item.id.valueOf()}` product-status=`inactive`) Hoạt động
+                else
+                    button(link=`/${prefixAdmin}/products/change-single-status` class="badge badge-danger"
+                        product-id=`${item.id.valueOf()}` product-status=`active`) Dừng hoạt động
         td
             if(path==='')
                 a(href=`/${prefixAdmin}/products/detail/${item.id}`) 
                     <button class="btn btn-info btn-sm"> Chi tiết </button>
-                a(href=`/${prefixAdmin}/products/pageChangeProduct/${item.id}`) 
-                    <button class="btn btn-warning btn-sm"> Sửa </button>
-                button(class="btn btn-danger btn-sm ml-1" button-delete=`/${prefixAdmin}/products/delete/${item.id}`) Xóa
+                if(roleUser.permissions.includes('products_edit'))
+                    a(href=`/${prefixAdmin}/products/pageChangeProduct/${item.id}`) 
+                        <button class="btn btn-warning btn-sm"> Sửa </button>
+                if(roleUser.permissions.includes('products_delete'))
+                    button(class="btn btn-danger btn-sm ml-1" button-delete=`/${prefixAdmin}/products/delete/${item.id}`) Xóa
             else
                 button(class="btn btn-warning btn-sm" button-restore=`/${prefixAdmin}/products/restore/${item.id}`) Khôi phục
                 button(class="btn btn-danger btn-sm ml-1" button-remove=`/${prefixAdmin}/products/remove/${item.id}`) Xóa vĩnh viễn

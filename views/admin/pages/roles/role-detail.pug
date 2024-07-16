@@ -1,7 +1,8 @@
 extends ../../layouts/default.pug
 block content
-    if(role.title)
-        h2(class="mb-4") Nhóm quyền 
-        h3(class="mb-4") #{role.title}
-    if(role.description)
-        div(class="mb-4") Mô tả: #{role.description}
+    if(roleUser.permissions.includes('roles_view'))
+        if(role.title)
+            h2(class="mb-4") Nhóm quyền 
+            h3(class="mb-4") #{role.title}
+        if(role.description)
+            div(class="mb-4") Mô tả: #{role.description}

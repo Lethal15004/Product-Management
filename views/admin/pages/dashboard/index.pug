@@ -1,3 +1,13 @@
 extends ../../layouts/default.pug
 block content
     h2 Trang tổng quan
+    div Họ tên: <b>#{accountUser.fullName}</b>
+    div Email: #{accountUser.email}
+    div SĐT: #{accountUser.phone}
+    img(src=accountUser.avatar, alt="avatar" width="150" height="150")
+
+    div Nhóm quyền: <b>#{roleUser.title}</b>
+    div Danh sách phân quyền:
+        ul
+            each role in roleUser.permissions
+                li #{role}

@@ -40,19 +40,42 @@ module.exports.index=async(req,res)=>{
 }
 
 module.exports.restoreProduct=async(req,res)=>{
-    const id=req.params.id;
-    await Products.updateOne({_id:id},{deleted:false});
-    req.flash('success','Khôi phục sản phẩm thành công');
-    res.json({
-        code:200
-    })
+    if(res.locals.roleUser.permissions.includes('products_edit')){
+        try {
+            const id=req.params.id;
+            await Products.updateOne({_id:id},{deleted:false});
+            req.flash('success','Khôi phục sản phẩm thành công');
+            res.json({
+                code:200
+            })
+        } catch (error) {
+            req.flash('error','Khôi phục sản phẩm thất bại');
+            res.json({
+                code:500
+            })
+        }
+    }else{
+        res.send('403');
+    }
+
 }
 
 module.exports.removeProduct=async(req,res)=>{
-    const id=req.params.id;
-    await Products.deleteOne({_id:id});
-    req.flash('success','Xóa sản phẩm vĩnh viễn thành công');
-    res.json({
-        code:200
-    })
+    if(res.locals.roleUser.permissions.includes('products_edit')){
+        try {
+            const id=req.params.id;
+            await Products.deleteOne({_id:id});
+            req.flash('success','Xóa sản phẩm vĩnh viễn thành công');
+            res.json({
+                code:200
+            })
+        } catch (error) {
+            req.flash('error','Xóa sản phẩm vĩnh viễn thất bại');
+            res.json({
+                code:500
+            })
+        }
+    }else{
+        res.send('403');
+    }
 }

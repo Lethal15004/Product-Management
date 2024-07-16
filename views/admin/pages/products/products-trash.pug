@@ -5,40 +5,41 @@ include ../../mixins/list-products.pug
 include ../../mixins/pagination.pug
 include ../../mixins/box-action.pug
 block content
-    if(messages.success)
-      div(class="alert alert-success show-alert" show-alert="3000") #{messages.success}
-    h2 Quản lý sản phẩm bị xóa
-    .card.mb-3
-    .card-header Bộ lọc và Tìm kiếm
-    .card-body
-      .row
-        .col-6
-          //- Bộ lọc bên mixins
-          +filter-status(buttonFilters)
-        .col-6
-          //- Tìm kiếm bên mixins
-          +search(keyword)
-    .card.mb-3
-      .card-header Hành động
+    if(roleUser.permissions.includes('products_edit'))
+      if(messages.success)
+        div(class="alert alert-success show-alert" show-alert="3000") #{messages.success}
+      h2 Quản lý sản phẩm bị xóa
+      .card.mb-3
+      .card-header Bộ lọc và Tìm kiếm
       .card-body
-        +boxAction(`/${prefixAdmin}/products/changeProducts`,path)
-    .card.mb-3
-        .card-header Danh sách
+        .row
+          .col-6
+            //- Bộ lọc bên mixins
+            +filter-status(buttonFilters)
+          .col-6
+            //- Tìm kiếm bên mixins
+            +search(keyword)
+      .card.mb-3
+        .card-header Hành động
         .card-body
-            table.table.table-hover.table-sm
-              thead
-                tr
-                    th
-                      input(name="checkAll" type="checkbox")
-                    th STT
-                    th Hình ảnh
-                    th Tiêu đề
-                    th Giá
-                    th Vị trí
-                    th Trạng thái
-                    th Hành động
-              tbody
-                //- Danh sách sản phẩm bên mixins
-                +listProducts(Products,path)
-    //- Phân trang bên mixins
-    +pagination(pagination)
+          +boxAction(`/${prefixAdmin}/products/changeProducts`,path)
+      .card.mb-3
+          .card-header Danh sách
+          .card-body
+              table.table.table-hover.table-sm
+                thead
+                  tr
+                      th
+                        input(name="checkAll" type="checkbox")
+                      th STT
+                      th Hình ảnh
+                      th Tiêu đề
+                      th Giá
+                      th Vị trí
+                      th Trạng thái
+                      th Hành động
+                tbody
+                  //- Danh sách sản phẩm bên mixins
+                  +listProducts(Products,path)
+      //- Phân trang bên mixins
+      +pagination(pagination)
