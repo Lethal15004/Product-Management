@@ -1,5 +1,6 @@
 const Products=require('../../models/admin/product.model');
 module.exports.index= async (req,res)=>{
+    console.log(res.locals.categories);
     const listProducts= await Products.find({
         status:'active',
         deleted:false
