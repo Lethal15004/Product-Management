@@ -30,6 +30,9 @@ mixin listProducts(Products,path='')
                 else
                     button(link=`/${prefixAdmin}/products/change-single-status` class="badge badge-danger"
                         product-id=`${item.id.valueOf()}` product-status=`active`) Dừng hoạt động
+        td 
+            div #{item.nameCreated}
+            div #{item.createdAtFormat}
         td
             if(path==='')
                 a(href=`/${prefixAdmin}/products/detail/${item.id}`) 

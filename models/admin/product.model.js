@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-const moment = require('moment-timezone');//chưa sử dụng
 const slug = require('mongoose-slug-updater');
 mongoose.plugin(slug);
 const productsSchema = new mongoose.Schema({
@@ -12,6 +11,9 @@ const productsSchema = new mongoose.Schema({
     thumbnail: String,
     status: String,
     position: Number,
+    createdBy:String,
+    updatedBy:String,
+    deletedBy:String,
     slug:{
         type:String,
         slug:"title",// Tạo slug từ trường title

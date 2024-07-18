@@ -18,21 +18,27 @@ block content
 
         if (product.thumbnail)
             div(class="mb-4")
-            img(
-                src=product.thumbnail
-                style="width: 100px"
-            )
+                img(
+                    src=product.thumbnail
+                    style="width: 100px"
+                )
 
         if (product.status)
             div(class="mb-4")
-            span Trạng thái:
-            if (product.status === "active")
-                span(class="badge badge-success") Hoạt động
-            else
-                span(class="badge badge-danger") Dừng hoạt động
+                span Trạng thái:
+                if (product.status === "active")
+                    span(class="badge badge-success") Hoạt động
+                else
+                    span(class="badge badge-danger") Dừng hoạt động
 
         if (product.position)
             div(class="mb-4") Vị trí: <b>#{product.position}</b>
 
         if (product.description)
             div(class="mb-4") !{product.description}
+        if (product.nameUpdated)
+            div(class="mb-4") Người cập nhật: #{product.nameUpdated}
+        if (product.nameDeleted)
+            div(class="mb-4") Người đã xóa: #{product.nameDeleted}
+        if (product.updatedAtFormat)
+            div(class="mb-4") Lần cuối cập nhật: #{product.updatedAtFormat}
