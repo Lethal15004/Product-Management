@@ -1,3 +1,35 @@
 extends ../../layouts/default.pug
+include ../../mixins/box-head.pug
 block content
-    h1 #{title}
+    .container.my-3
+        .row
+            .col-12
+                +box-head("Sản phẩm nổi bật")
+        .row
+            each product in listProductsFeatured
+                .col-4.mb-3
+                    .product-item
+                        .inner-image
+                            img(src=product.thumbnail, alt=product.title)
+                        .inner-content
+                            h3.inner-title
+                            a(href=`/products/detail/${product.slug}`) #{product.title}
+                            .inner-price-new #{product.priceNew}$
+                            .inner-price-old #{product.price}$
+                            .inner-discount -#{product.discountPercentage}%
+    .container.my-3
+        .row
+            .col-12
+                +box-head("Sản phẩm nổi mới nhất")
+        .row
+            each product in listProductsNew
+                .col-4.mb-3
+                    .product-item
+                        .inner-image
+                            img(src=product.thumbnail, alt=product.title)
+                        .inner-content
+                            h3.inner-title
+                            a(href=`/products/detail/${product.slug}`) #{product.title}
+                            .inner-price-new #{product.priceNew}$
+                            .inner-price-old #{product.price}$
+                            .inner-discount -#{product.discountPercentage}%
