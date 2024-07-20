@@ -1,8 +1,8 @@
-module.exports = async (req,Products,find)=>{ // Hàm phân trang
+module.exports = async (req,Products,find,limitItems=4)=>{ // Hàm phân trang
     //Phân trang 
     const pagination={
         currentPage:1,
-        limitItems:4,
+        limitItems:limitItems,
     };
 
     if(req.query.page){

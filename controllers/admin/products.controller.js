@@ -47,7 +47,7 @@ module.exports.index= async (req,res)=>{
 
 
         //Phân trang backend
-        const pagination = await paginationHelper(req,Products,find);
+        const pagination = await paginationHelper(req,Products,find,4);
         
         const listProducts= await Products.find(find).limit(pagination.limitItems).skip(pagination.skip)
                                         .sort(sort);
