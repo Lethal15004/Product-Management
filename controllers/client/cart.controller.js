@@ -32,12 +32,11 @@ module.exports.add=async(req,res)=>{
                 _id:cartId
             },{
                 $push:{
-                    products:[
-                        {
-                            productId:productId,
-                            quantity:quantity
-                        }
-                    ]
+                    products:
+                    {
+                        productId:productId,
+                        quantity:quantity
+                    }
                 }
             })
         }
