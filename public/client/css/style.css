@@ -213,3 +213,17 @@
   border-radius: 8px;
 }
 /* End product-detail */
+
+
+/* Start show-alert */
+.show-alert {
+  position: fixed;
+  top: 70px;
+  right: 20px;
+  z-index: 999;
+}
+
+.show-alert.hidden {
+  display: none;
+}
+/* End show-alert */
