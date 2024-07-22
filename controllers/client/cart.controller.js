@@ -1,7 +1,34 @@
 const Cart=require('../../models/client/cart.model');
 const Products=require('../../models/admin/product.model');
-module.exports.index = (req,res)=>{
-    res.send('OKE');
+module.exports.index = async (req,res)=>{
+    try {
+        const cart = await Cart.findOne({
+            _id:req.cookies.cartId
+        })
+        const listProductsCart=cart.products;
+        let totalMoney=0;
+        if(listProductsCart.length>0){
+            for(const product of listProductsCart){
+                const productInfo=await Products.findOne({
+                    _id:product.productId,
+                    status:'active',
+                    deleted:false
+                }).select("title thumbnail slug price discountPercentage");
+                product.productInfo=productInfo;
+                product.productInfo.priceNew=((1-product.productInfo.discountPercentage/100)*product.productInfo.price).toFixed(0);
+                product.productInfo.totalPrice=(product.productInfo.priceNew*product.quantity).toFixed(0);
+                totalMoney+=Number(product.productInfo.totalPrice);
+            }
+        }
+        res.render('client/pages/cart/index',{
+            title:'Giỏ hàng',
+            listProductsCart:listProductsCart,
+            totalMoney:totalMoney
+        })
+    } catch (error) {
+        req.flash('error','Lỗi truy cập giỏ hàng');
+        res.redirect('/products');
+    }
 }
 
 //Thêm sản phẩm vào giỏ hàng
