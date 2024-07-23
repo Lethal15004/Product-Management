@@ -8,4 +8,5 @@ router.post('/add/:id',cartController.add);
 
 router.get('/delete/:id',cartController.delete);
 
+router.get('/update/:id/:quantity',cartController.update);
 module.exports=router;

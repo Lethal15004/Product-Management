@@ -95,3 +95,23 @@ module.exports.delete=async(req,res)=>{
         res.redirect('back');
     }
 }
+
+module.exports.update=async(req,res)=>{
+    try {
+        const id=req.params.id;
+        const quantity=Number(req.params.quantity);
+        await Cart.updateOne({
+            _id:req.cookies.cartId,
+            "products.productId":id
+        },{
+            $set:{
+                "products.$.quantity":quantity
+            }
+        })
+        req.flash('success','Cập nhật số lượng thành công');
+        res.redirect('back');
+    } catch (error) {
+        req.flash('error','Lỗi cập nhật số lượng');
+        res.redirect('back');
+    }
+}
