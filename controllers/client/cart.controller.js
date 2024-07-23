@@ -74,3 +74,24 @@ module.exports.add=async(req,res)=>{
         res.redirect('back');
     }
 }
+
+module.exports.delete=async(req,res)=>{
+    try {
+        const idProduct=req.params.id;
+        const idCart=req.cookies.cartId;
+        await Cart.updateOne({
+            _id:idCart,
+        },{
+            $pull:{
+                products:{
+                    productId:idProduct
+                }
+            }
+        })
+        req.flash('success','Xóa sản phẩm khỏi giỏ hàng thành công');
+        res.redirect('back');
+    } catch (error) {
+        req.flash('error','Lỗi xóa sản phẩm khỏi giỏ hàng');
+        res.redirect('back');
+    }
+}
