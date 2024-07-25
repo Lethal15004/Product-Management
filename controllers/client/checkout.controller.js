@@ -26,3 +26,43 @@ module.exports.index=async (req,res)=>{
     }
     
 }
+
+module.exports.order=async (req,res)=>{
+    if(!req.body.fullName || !req.body.phone || !req.body.address){
+        req.flash('error','Vui lòng nhập đầy đủ thông tin');
+        res.redirect('/checkout');
+    }else{
+        const dataSave ={
+            userInfo:{
+                fullName: req.body.fullName,
+                phone: req.body.phone,
+                address: req.body.address
+            },
+            products:[],
+        }
+        const cart=await Cart.findOne({
+            _id:req.cookies.cartId
+        })
+    
+        let listProductsCart=cart.products;
+        for(let product of listProductsCart){
+            const dataPush={}
+            const productInfo=await Product.findOne({_id:product.productId}).select("price discountPercentage");
+            dataPush.productId=product.productId;
+            dataPush.quantity=product.quantity;
+            dataPush.price=productInfo.price;
+            dataPush.discountPercentage=productInfo.discountPercentage;
+            dataSave.products.push(dataPush);
+        }
+        console.log(dataSave);
+        const newOrder= new Order(dataSave);
+        newOrder.save();
+
+        await Cart.updateOne({
+            _id:req.cookies.cartId
+        },{
+            products:[]
+        })
+        res.redirect(`/checkout/success/${newOrder.id}`);
+    }
+}

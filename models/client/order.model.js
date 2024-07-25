@@ -1,9 +1,18 @@
 const mongoose = require('mongoose');
 const orderSchema = new mongoose.Schema({
     userInfo:{
-        fullName:String,
-        phone:String,
-        address:String
+        fullName:{
+            type:String,
+            required: true
+        },
+        phone:{
+            type:String,
+            required:true
+        },
+        address:{
+            type:String,
+            required:true  
+        }
     },
     products:[
         {
