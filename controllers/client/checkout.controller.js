@@ -54,7 +54,6 @@ module.exports.order=async (req,res)=>{
             dataPush.discountPercentage=productInfo.discountPercentage;
             dataSave.products.push(dataPush);
         }
-        console.log(dataSave);
         const newOrder= new Order(dataSave);
         newOrder.save();
 
@@ -65,4 +64,25 @@ module.exports.order=async (req,res)=>{
         })
         res.redirect(`/checkout/success/${newOrder.id}`);
     }
+}
+
+module.exports.success=async (req,res)=>{
+    const order=await Order.findOne({
+        _id:req.params.orderId
+    })
+    let totalMoney=0;
+    for(let product of order.products){
+        const productInfo=await Product.findOne({_id:product.productId}).select("title thumbnail slug price discountPercentage");
+        product.title=productInfo.title;
+        product.thumbnail=productInfo.thumbnail;
+        product.priceNew=((1-product.discountPercentage/100)*product.price).toFixed(0);
+        product.totalPrice=(product.priceNew*product.quantity).toFixed(0);
+        totalMoney+=Number(product.totalPrice);
+        console.log(product);
+    }
+    res.render('client/pages/checkout/success',{
+        title: 'Đặt hàng thành công',
+        order: order,
+        totalMoney: totalMoney
+    })
 }
