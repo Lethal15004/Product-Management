@@ -6,7 +6,7 @@ header.header
         .inner-logo
           a(href="/")
             img(src="/client/images/logo.svg", alt="Logo")
-      .col-5
+      .col-4
         form(
           action="/search"
           method="GET"
@@ -23,7 +23,7 @@ header.header
               type="submit"
               class="btn btn-primary"
             ) Tìm            
-      .col-4
+      .col-5
         .inner-menu
           ul
             li
@@ -34,3 +34,5 @@ header.header
                 +sub-menu(categories)
             li
               a(href="/cart") Giỏ hàng (#{cartTotal})
+            li
+              a(href="/user/register") Đăng ký

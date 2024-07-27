@@ -3,6 +3,7 @@ const productRoute=require('./product.route');
 const searchRoute=require('./search.route');
 const cartRoute=require('./cart.route');
 const checkoutRoute=require('./checkout.route');
+const userRoute=require('./user.route');
 //middleware
 const categoryMiddleware=require('../../middleware/client/category.middleware');
 const cartMiddleware=require('../../middleware/client/cart.middleware');
@@ -15,4 +16,5 @@ module.exports.index = (app)=>{
     app.use('/search', searchRoute);
     app.use('/cart', cartRoute);
     app.use('/checkout', checkoutRoute);
+    app.use('/user', userRoute);   
 }
