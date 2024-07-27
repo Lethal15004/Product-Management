@@ -34,7 +34,13 @@ header.header
                 +sub-menu(categories)
             li
               a(href="/cart") Giỏ hàng (#{cartTotal})
-            li
-              a(href="/user/login") Đăng nhập
-            li
-              a(href="/user/register") Đăng ký
+            if(user)
+              li
+                a(href="/user/logout") Đăng xuất
+              li
+                a(href="/user/profile") Chào #{user.fullName.split(' ').reverse()[0]}
+            else
+              li
+                a(href="/user/login") Đăng nhập
+              li
+                a(href="/user/register") Đăng ký

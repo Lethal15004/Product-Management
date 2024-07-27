@@ -7,10 +7,12 @@ const userRoute=require('./user.route');
 //middleware
 const categoryMiddleware=require('../../middleware/client/category.middleware');
 const cartMiddleware=require('../../middleware/client/cart.middleware');
+const userMiddleware=require('../../middleware/client/user.middleware');
 
 module.exports.index = (app)=>{
     app.use(cartMiddleware);
     app.use(categoryMiddleware);
+    app.use(userMiddleware);
     app.use('/', homeRoute);
     app.use('/products', productRoute);
     app.use('/search', searchRoute);
