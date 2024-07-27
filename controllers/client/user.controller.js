@@ -1,5 +1,5 @@
 const User=require('../../models/client/user.model');
-
+const ForgotPassword=require('../../models/client/forgot-password.model');
 const md5=require('md5');
 
 const generateTokenUser=require('../../helpers/generateToken.helper');
@@ -68,4 +68,29 @@ module.exports.logout= async (req,res)=>{
     res.clearCookie('tokenUser');
     req.flash('success','Đăng xuất thành công');
     res.redirect('/user/login');
+}
+
+module.exports.pageForgotPassword= async (req,res)=>{
+    res.render('client/pages/user/forgot-password',{
+        title: 'Lấy lại mật khẩu'
+    })
+}
+
+module.exports.forgotPassword= async (req,res)=>{
+    const email=req.body.email;
+    const user=await User.findOne({email:email,status:'active',deleted:false});
+    if(!user){
+        req.flash('error','Email không tồn tại');
+        res.redirect('back');
+        return;
+    }
+    const dataSave={
+        email:email,
+        otp:generateTokenUser.generateRandomNumber(6),
+        expireAt: Date.now() + 3*60*1000
+    }
+    const newForgotPassword=new ForgotPassword(dataSave);
+    newForgotPassword.save();
+    
+    res.redirect(`/user/password/otp?email=${email}`);
 }

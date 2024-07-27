@@ -9,4 +9,7 @@ router.get('/login',userController.pageLogin);
 router.post('/login',userController.login);
 
 router.get('/logout',userController.logout);
+
+router.get('/password/forgot',userController.pageForgotPassword);
+router.post('/password/forgot',userController.forgotPassword);
 module.exports=router;
