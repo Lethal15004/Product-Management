@@ -94,3 +94,27 @@ module.exports.forgotPassword= async (req,res)=>{
     
     res.redirect(`/user/password/otp?email=${email}`);
 }
+
+module.exports.pageOtp= async (req,res)=>{
+    res.render('client/pages/user/otp-password',{
+        title:'Xác nhận OTP',
+        email:req.query.email
+    })
+}
+
+module.exports.otp= async (req,res)=>{
+    const {email,otp}=req.body;
+    const forgotPassword=await ForgotPassword.findOne({email:email,otp:otp});
+    if(!forgotPassword){
+        req.flash('error','Mã OTP không đúng');
+        res.redirect('back');
+        return;
+    }
+    const user=await User.findOne({
+        email:email,
+        status:'active',
+        deleted:false
+    })
+    res.cookie('tokenUser',user.tokenUser);
+    res.redirect('/user/password/reset');
+}
