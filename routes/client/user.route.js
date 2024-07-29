@@ -14,5 +14,8 @@ router.get('/password/forgot',userController.pageForgotPassword);
 router.post('/password/forgot',userController.forgotPassword);
 
 router.get('/password/otp',userController.pageOtp);
-router.post('/password/otp',userController.otp);   
+router.post('/password/otp',userController.otp);
+
+router.get('/password/reset',userController.pageResetPassword);
+router.patch('/password/reset',userController.resetPassword);
 module.exports=router;

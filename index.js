@@ -18,7 +18,13 @@ database.connect();//Kết nối database
 
 //Phần flash -> Để hiển thị thông báo (Quan trọng phải có)
 app.use(cookieParser('alert-1x2'));
-app.use(session({ cookie: { maxAge: 60000 }}));
+app.use(session(
+    {   secret: 'some secret', // Thay thế bằng một khóa bí mật mạnh
+        resave: false,
+        cookie: { maxAge: 20*60*1000 },
+        saveUninitialized:true
+    }
+));
 app.use(flash());
 
 //Phần view engine -> Để render file pug (Quan trọng phải có)

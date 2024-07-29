@@ -71,6 +71,7 @@ module.exports.logout= async (req,res)=>{
 }
 
 module.exports.pageForgotPassword= async (req,res)=>{
+    
     res.render('client/pages/user/forgot-password',{
         title: 'Lấy lại mật khẩu'
     })
@@ -84,6 +85,8 @@ module.exports.forgotPassword= async (req,res)=>{
         res.redirect('back');
         return;
     }
+
+
     const dataSave={
         email:email,
         otp:generateTokenUser.generateRandomNumber(6),
@@ -115,6 +118,18 @@ module.exports.otp= async (req,res)=>{
         status:'active',
         deleted:false
     })
-    res.cookie('tokenUser',user.tokenUser);
+    req.session.tokenUser = user.tokenUser;
     res.redirect('/user/password/reset');
+}
+
+module.exports.pageResetPassword= async (req,res)=>{
+    res.render('client/pages/user/reset-password',{
+        title:'Đổi mật khẩu mới',
+    })
+}
+module.exports.resetPassword= async (req,res)=>{
+    const newPassword=md5(req.body.password);
+    await User.updateOne({tokenUser:req.session.tokenUser},{password:newPassword});
+    req.flash('success','Đổi mật khẩu thành công');
+    res.redirect('/user/login');
 }
