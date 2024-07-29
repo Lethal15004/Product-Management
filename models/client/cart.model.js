@@ -5,7 +5,12 @@ const cartSchema = new mongoose.Schema({
             productId: String,
             quantity: Number
         }
-    ]
+    ],
+    expireAt: 
+    { 
+        type: Date,  
+        expires: 0
+    }
 },{
     timestamps:true
 }

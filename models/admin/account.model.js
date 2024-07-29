@@ -11,7 +11,6 @@ const accountSchema = new mongoose.Schema({
     deleted:{
         type: Boolean,
         default: false
-    
     }
 },{
     timestamps:true
