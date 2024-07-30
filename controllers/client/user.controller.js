@@ -3,7 +3,7 @@ const ForgotPassword=require('../../models/client/forgot-password.model');
 const md5=require('md5');
 
 const generateTokenUser=require('../../helpers/generateToken.helper');
-
+const sendEmailHelper=require('../../helpers/sendEmail.helper');
 module.exports.pageRegister= async (req,res)=>{
     res.render('client/pages/user/register',{
         title: 'Đăng ký'
@@ -85,16 +85,19 @@ module.exports.forgotPassword= async (req,res)=>{
         res.redirect('back');
         return;
     }
-
-
+    const otp=generateTokenUser.generateRandomNumber(6);
     const dataSave={
         email:email,
-        otp:generateTokenUser.generateRandomNumber(6),
+        otp:otp,
         expireAt: Date.now() + 3*60*1000
     }
     const newForgotPassword=new ForgotPassword(dataSave);
     newForgotPassword.save();
     
+    const subject= 'Mã OTP lấy lại mật khẩu';
+    const html = `Mã OTP xác thực của bạn là <b style="color: greenyellow;">${otp}</b>. Mã OTP có hiệu lực trong 3 phút. Vui lòng không cung cấp mã OTP cho người khác`;
+    sendEmailHelper.sendEmail(email,subject,html);
+
     res.redirect(`/user/password/otp?email=${email}`);
 }
 
