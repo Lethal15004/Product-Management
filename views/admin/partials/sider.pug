@@ -11,7 +11,9 @@
       if(roleUser.permissions.includes('products-category_view'))
         li
           a(href=`/${prefixAdmin}/products-category`) Danh mục sản phẩm
-          
+      li
+        a(href=`/${prefixAdmin}/orders`) Danh sách đơn hàng
+        
       if(roleUser.permissions.includes('roles_view'))
         li
           a(href=`/${prefixAdmin}/roles`) Nhóm quyền

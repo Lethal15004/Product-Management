@@ -21,7 +21,11 @@ const orderSchema = new mongoose.Schema({
             discountPercentage: Number,
             quantity: Number
         }
-    ]
+    ],
+    status:{
+        type:String,
+        default:"pending"
+    }
 },{
     timestamps:true
 }

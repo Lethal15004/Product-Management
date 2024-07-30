@@ -1,8 +1,14 @@
 const Order=require('../../models/client/order.model');
 const Cart=require('../../models/client/cart.model');
 const Product=require('../../models/admin/product.model');
+const User=require('../../models/client/user.model');
 module.exports.index=async (req,res)=>{
     try {
+        const tokenUser=req.cookies.tokenUser;
+        let user;
+        if(tokenUser){
+            user=await User.findOne({tokenUser:tokenUser,deleted:false,status:"active"}) || null;
+        }
         const cart=await Cart.findOne({
             _id:req.cookies.cartId
         })
@@ -18,7 +24,8 @@ module.exports.index=async (req,res)=>{
         res.render('client/pages/checkout/index',{
             title: 'Đặt hàng',
             listProductsCart:listProducts,
-            totalMoney: totalMoney  
+            totalMoney: totalMoney,
+            user:user
         });
     } catch (error) {
         req.flash('error','Có lỗi xảy ra, vui lòng thử lại sau');
@@ -78,7 +85,6 @@ module.exports.success=async (req,res)=>{
         product.priceNew=((1-product.discountPercentage/100)*product.price).toFixed(0);
         product.totalPrice=(product.priceNew*product.quantity).toFixed(0);
         totalMoney+=Number(product.totalPrice);
-        console.log(product);
     }
     res.render('client/pages/checkout/success',{
         title: 'Đặt hàng thành công',
