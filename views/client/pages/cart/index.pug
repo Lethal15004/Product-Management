@@ -28,10 +28,7 @@ block content
                                 alt=product.productInfo.title
                                 width="80px"
                             )
-                        td 
-                            a(
-                                href=`/products/detail/${product.productInfo.slug}`
-                            ) #{product.productInfo.title}
+                        td #{product.productInfo.title}
                         td #{product.productInfo.priceNew}$
                         td
                             input(
