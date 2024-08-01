@@ -91,6 +91,7 @@ module.exports.forgotPassword= async (req,res)=>{
         otp:otp,
         expireAt: Date.now() + 3*60*1000
     }
+    
     const newForgotPassword=new ForgotPassword(dataSave);
     newForgotPassword.save();
     

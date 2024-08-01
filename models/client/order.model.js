@@ -25,6 +25,11 @@ const orderSchema = new mongoose.Schema({
     status:{
         type:String,
         default:"pending"
+    },
+    expireAt: 
+    { 
+        type: Date,  
+        expires: 0
     }
 },{
     timestamps:true

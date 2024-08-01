@@ -10,15 +10,15 @@ block content
         a(href="/admin/products/trash") <button type="button" class="btn btn-secondary button-trash"><i class="fa-solid fa-trash"></i> Thùng rác </button>
       h2 Quản lý sản phẩm
       .card.mb-3
-      .card-header Bộ lọc và Tìm kiếm
-      .card-body
-        .row
-          .col-6
-            //- Bộ lọc bên mixins
-            +filter-status(buttonFilters)
-          .col-6
-            //- Tìm kiếm bên mixins
-            +search(keyword)
+        .card-header Bộ lọc và Tìm kiếm
+        .card-body
+          .row
+            .col-6
+              //- Bộ lọc bên mixins
+              +filter-status(buttonFilters)
+            .col-6
+              //- Tìm kiếm bên mixins
+              +search(keyword)
       if(roleUser.permissions.includes('products_edit'))
         .card.mb-3
           .card-header Hành động

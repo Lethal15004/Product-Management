@@ -397,3 +397,118 @@ if(tablePermissions&&btnUpdatePermissions){
 
 }
 
+const listOrdersButtonAccept=document.querySelectorAll('[orders-button-accept]');
+listOrdersButtonAccept.forEach(btn=>{
+    btn.addEventListener('click',(e)=>{
+        const swalWithBootstrapButtons = Swal.mixin({
+            customClass: {
+              confirmButton: "btn btn-success",
+              cancelButton: "btn btn-danger"
+            },
+            buttonsStyling: false
+          });
+          swalWithBootstrapButtons.fire({
+            title: "Bạn có chắc chắn muốn xác nhận đơn hàng này ?",
+            text: "Bạn không thể hoàn tác hành động này !",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonText: "Có, tôi chắc chắn!",
+            cancelButtonText: "Không, hủy bỏ!",
+            reverseButtons: true
+          }).then((result) => {
+            if (result.isConfirmed) {
+                const link = btn.getAttribute('orders-button-accept');
+                fetch(link,{
+                    method:'PATCH',
+                    headers:{
+                        'Content-Type':'application/json'
+                    }
+                })
+                .then(response=>response.json())
+                .then( async (data) =>{
+                    if(data.code===200){
+                        await swalWithBootstrapButtons.fire({
+                            title: "Đã xác nhận dơn !",
+                            text: data.message,
+                            icon: "success"
+                        });
+                    }else{
+                        await swalWithBootstrapButtons.fire({
+                            title: "Lỗi !",
+                            text: data.message,
+                            icon: "error"
+                        });
+                    }
+                    window.location.reload();
+                })
+            } else if (
+              result.dismiss === Swal.DismissReason.cancel
+            ) {
+              swalWithBootstrapButtons.fire({
+                title: "Hủy bỏ!",
+                text: "Thao tác của bạn đã hủy",
+                icon: "error"
+              });
+            }
+          });        
+    })
+})
+
+
+const listOrdersButtonCancel=document.querySelectorAll('[orders-button-cancel]');
+listOrdersButtonCancel.forEach(btn=>{
+    btn.addEventListener('click',(e)=>{
+        const swalWithBootstrapButtons = Swal.mixin({
+            customClass: {
+              confirmButton: "btn btn-success",
+              cancelButton: "btn btn-danger"
+            },
+            buttonsStyling: false
+          });
+          swalWithBootstrapButtons.fire({
+            title: "Bạn có chắc chắn muốn hủy đơn hàng này ?",
+            text: "Bạn không thể hoàn tác hành động này !",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonText: "Có, tôi chắc chắn !",
+            cancelButtonText: "Không, hủy bỏ !",
+            reverseButtons: true
+          }).then((result) => {
+            if (result.isConfirmed) {
+                const link = btn.getAttribute('orders-button-cancel');
+                fetch(link,{
+                    method:'PATCH',
+                    headers:{
+                        'Content-Type':'application/json'
+                    }
+                })
+                .then(response=>response.json())
+                .then( async (data) =>{
+                    if(data.code===200){
+                        await swalWithBootstrapButtons.fire({
+                            title: "Đã hủy dơn!",
+                            text: data.message,
+                            icon: "success"
+                        });
+                    }else{
+                        await swalWithBootstrapButtons.fire({
+                            title: "Lỗi!",
+                            text: data.message,
+                            icon: "error"
+                        });
+                    }
+                    window.location.reload();
+                })
+            } else if (
+              result.dismiss === Swal.DismissReason.cancel
+            ) {
+              swalWithBootstrapButtons.fire({
+                title: "Hủy bỏ!",
+                text: "Thao tác của bạn đã hủy",
+                icon: "error"
+              });
+            }
+          });        
+    })
+})
+

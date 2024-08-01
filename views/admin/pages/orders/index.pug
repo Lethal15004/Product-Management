@@ -1,7 +1,19 @@
 extends ../../layouts/default.pug
 include ../../mixins/pagination.pug
+include ../../mixins/filter-buttons.pug
+include ../../mixins/search-component.pug
 block content
     h2 #{title}
+    .card.mb-3
+        .card-header Bộ lọc và Tìm kiếm
+        .card-body
+          .row
+            .col-6
+              //- Bộ lọc bên mixins
+              +filter-status(buttonFilters)
+            .col-6
+              //- Tìm kiếm bên mixins
+              +search(keyword)
     .card.mb-3
         .card-header Danh sách đơn hàng
         .card-body
@@ -29,15 +41,15 @@ block content
                                         class="badge badge-warning"
                                         data-status="pending"
                                     ) Chờ xác nhận
-                                else if (order.status==='success')
+                                else if (order.status==='accepted')
                                     div(
                                         class="badge badge-success"
-                                        data-status="success"
+                                        data-status="accepted"
                                     ) Đã xác nhận
                                 else 
                                     div(
                                         class="badge badge-danger"
-                                        data-status="cancel"
+                                        data-status="cancelled"
                                     ) Đã hủy
                             td #{order.createdAtFormat}
                             td #{order.totalMoney} $
@@ -46,12 +58,12 @@ block content
                                     class="btn btn-secondary btn-sm"
                                     href=`/${prefixAdmin}/orders/detail/${order.id}`
                                 ) Chi tiết
-                                a(
-                                    class="btn btn-success btn-sm ml-1"
-                                    href=`/${prefixAdmin}/orders/edit`
-                                ) Xác nhận
-                                button(
-                                    class="btn btn-danger btn-sm ml-1"
-                                    button-delete=`/${prefixAdmin}/orders/cancel`
-                                    data-id
-                                ) Hủy đơn 
+                                if(order.status==='pending')
+                                    button(
+                                        class="btn btn-success btn-sm ml-1"
+                                        orders-button-accept=`/${prefixAdmin}/orders/accept/${order.id}`
+                                    ) Xác nhận
+                                    button(
+                                        class="btn btn-danger btn-sm ml-1"
+                                        orders-button-cancel=`/${prefixAdmin}/orders/cancel/${order.id}`
+                                    ) Hủy đơn 

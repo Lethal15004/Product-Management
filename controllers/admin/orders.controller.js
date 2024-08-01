@@ -4,6 +4,20 @@ const Product=require('../../models/admin/product.model');
 const moment = require('moment');  
 module.exports.index= async (req,res)=>{
     const orders= await Order.find();
+    const buttonFilters=[
+        {
+            status:"pending",
+            title:"Chờ xác nhận"
+        },
+        {
+            status:"accepted",
+            title:"Đã xác nhận"
+        },
+        {
+            status:"cancelled",
+            title:"Đã hủy"
+        }
+    ]
     for(const order of orders){
         let totalMoney=0;
         for(const item of order.products){
@@ -15,7 +29,8 @@ module.exports.index= async (req,res)=>{
     }
     res.render('admin/pages/orders/index',{
         title:"Danh sách đơn hàng",
-        orders:orders
+        orders:orders,
+        buttonFilters:buttonFilters
     })
 }
 
@@ -44,5 +59,53 @@ module.exports.detail= async (req,res)=>{
     } catch (error) {
         req.flash('error','Lỗi: '+error);
         res.redirect('/admin/orders');
+    }
+}
+
+module.exports.accept= async (req,res)=>{   
+    try{
+        const id =req.params.id;
+        const order= await Order.findOne({_id:id});
+        if(order.status !=='pending'){
+            res.json({
+                code:404,
+                message:"Đơn hàng này đã được xác nhận hoặc đã bị hủy."
+            });
+            return;
+        }
+        await Order.updateOne({_id:id},{status:'accepted'});
+        res.json({
+            code:200,
+            message:"Đơn hàng này đã được xác nhận."
+        });
+    }catch(error){
+        res.json({
+            code:404,
+            message:"Lỗi: "+error
+        })
+    }
+}
+
+module.exports.cancel= async (req,res)=>{   
+    try{
+        const id =req.params.id;
+        const order= await Order.findOne({_id:id});
+        if(order.status !=='pending'){
+            res.json({
+                code:404,
+                message:"Đơn hàng này đã được xác nhận hoặc đã bị hủy."
+            });
+            return;
+        }
+        await Order.updateOne({_id:id},{status:'cancelled',expireAt: Date.now() + 24*60*60*1000});
+        res.json({
+            code:200,
+            message:"Đơn hàng này đã bị hủy"
+        });
+    }catch(error){
+        res.json({
+            code:404,
+            message:"Lỗi: "+error
+        })
     }
 }
