@@ -137,3 +137,11 @@ module.exports.resetPassword= async (req,res)=>{
     req.flash('success','Đổi mật khẩu thành công');
     res.redirect('/user/login');
 }
+
+module.exports.pageProfile= async (req,res)=>{
+    const user=await User.findOne({tokenUser:req.cookies.tokenUser});
+    res.render('client/pages/user/profile',{
+        title:'Thông tin tài khoản ca nhân',
+        user:user
+    })
+}

@@ -18,4 +18,6 @@ router.post('/password/otp',userController.otp);
 
 router.get('/password/reset',userController.pageResetPassword);
 router.patch('/password/reset',userController.resetPassword);
+
+router.get('/profile',userController.pageProfile);
 module.exports=router;
