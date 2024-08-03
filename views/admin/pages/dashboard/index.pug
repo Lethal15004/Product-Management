@@ -1,13 +1,49 @@
 extends ../../layouts/default.pug
 block content
     h2 Trang tổng quan
-    div Họ tên: <b>#{accountUser.fullName}</b>
-    div Email: #{accountUser.email}
-    div SĐT: #{accountUser.phone}
-    img(src=accountUser.avatar, alt="avatar" width="150" height="150")
-
-    div Nhóm quyền: <b>#{roleUser.title}</b>
-    div Danh sách phân quyền:
-        ul
-            each role in roleUser.permissions
-                li #{role}
+    .row.mt-4
+        .col-12
+            .card.mb-4
+                .card-header Thông tin tài khoản
+                .card-body
+                    if(accountUser.avatar)
+                        img(
+                        src=accountUser.avatar
+                        style="height: 100px;margin-bottom: 15px;"
+                        )
+                    if(accountUser.fullName)
+                        p Họ tên: <b>#{accountUser.fullName}</b>
+                    if(accountUser.email)
+                        p Email: <b>#{accountUser.email}</b>
+                    if(accountUser.phone)
+                        p Số điện thoại: <b>#{accountUser.phone}</b>
+                    if(roleUser)
+                        p Phân quyền: <b>#{roleUser.title}</b>
+        .col-6
+            .card.mb-4
+                .card-header Danh mục sản phẩm
+                .card-body
+                    p Số lượng: <b>#{statistic.productsCategory.total}</b>
+                    p Hoạt động: <b>#{statistic.productsCategory.active}</b>
+                    p Dừng hoạt động: <b>#{statistic.productsCategory.inactive}</b>
+        .col-6
+            .card.mb-4
+                .card-header Sản phẩm
+                .card-body
+                    p Số lượng: <b>#{statistic.Product.total}</b>
+                    p Hoạt động: <b>#{statistic.Product.active}</b>
+                    p Dừng hoạt động: <b>#{statistic.Product.inactive}</b>
+        .col-6
+            .card.mb-4
+                .card-header Tài khoản admin
+                .card-body
+                    p Số lượng: <b>#{statistic.Account.total}</b>
+                    p Hoạt động: <b>#{statistic.Account.active}</b>
+                    p Dừng hoạt động: <b>#{statistic.Account.inactive}</b>
+        .col-6
+            .card.mb-4
+                .card-header Tài khoản user
+                .card-body
+                    p Số lượng: <b>#{statistic.User.total}</b>
+                    p Hoạt động: <b>#{statistic.User.active}</b>
+                    p Dừng hoạt động: <b>#{statistic.User.inactive}</b>
