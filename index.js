@@ -34,6 +34,7 @@ app.use(express.static(`${__dirname}/public`));//Định tuyến file tĩnh (Qua
 
 //Phần body-parser -> Để lấy dữ liệu từ form và fetch (Quan trọng phải có)
 const bodyParser = require('body-parser');//Nhúng body-parser vào dự án
+const { title } = require('process');
 app.use(bodyParser.urlencoded({ extended: false }))//Nhận dữ liệu từ form
 app.use(bodyParser.json());//Nhận dữ liệu từ fetch
 
@@ -52,6 +53,12 @@ app.locals.prefixAdmin=systemConfig.prefixAdmin;
 routeClient.index(app);
 adminRoute.index(app);
 
+
+app.get('*',(req,res)=>{
+    res.render('client/pages/errors/404',{
+        title:'404'
+    });
+})
 
 //Khởi tạo server (Quan trọng phải có)
 app.listen(process.env.PORT, () => {
