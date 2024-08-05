@@ -1,6 +1,8 @@
 const express = require('express');//Nhúng express vào dự án
 const app = express(); // Khởi tạo ưng dụng web sử dụng express
 const path = require('path');//Nhúng path vào dự án
+const http = require('http');
+const server = http.createServer(app);//Tạo ra một server http
 require('dotenv').config()//Nhúng file .env vào dự án
 const methodOverride = require('method-override') //Nhúng method-override vào dự án
 const flash= require('express-flash');//Nhúng flash vào dự án
@@ -13,6 +15,15 @@ const adminRoute=require('./routes/admin/index.route');//Nhúng route vào dự 
 const systemConfig=require('./config/system');//Nhúng file cấu hình vào dự án\
 const database=require('./config/database');//Nhúng file cấu hình database vào dự án
 database.connect();//Kết nối database
+
+
+//Khởi tạo server socket.io
+const { Server } = require("socket.io");
+const io = new Server(server);// tạo ra một server socket.io
+
+io.on('connection', (socket) => {
+    console.log('Có 1 người dùng',socket.id);
+})
 
 
 
@@ -61,6 +72,6 @@ app.get('*',(req,res)=>{
 })
 
 //Khởi tạo server (Quan trọng phải có)
-app.listen(process.env.PORT, () => {
+server.listen(process.env.PORT, () => {
     console.log(`Đang lắng nghe cổng http://localhost:${process.env.PORT}`);
 })
