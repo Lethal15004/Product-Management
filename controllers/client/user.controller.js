@@ -71,7 +71,6 @@ module.exports.logout= async (req,res)=>{
 }
 
 module.exports.pageForgotPassword= async (req,res)=>{
-    
     res.render('client/pages/user/forgot-password',{
         title: 'Lấy lại mật khẩu'
     })
@@ -98,7 +97,7 @@ module.exports.forgotPassword= async (req,res)=>{
     const subject= 'Mã OTP lấy lại mật khẩu';
     const html = `Mã OTP xác thực của bạn là <b style="color: greenyellow;">${otp}</b>. Mã OTP có hiệu lực trong 3 phút. Vui lòng không cung cấp mã OTP cho người khác`;
     sendEmailHelper.sendEmail(email,subject,html);
-
+    req.session.tokenUser = user.tokenUser;
     res.redirect(`/user/password/otp?email=${email}`);
 }
 
@@ -122,7 +121,7 @@ module.exports.otp= async (req,res)=>{
         status:'active',
         deleted:false
     })
-    req.session.tokenUser = user.tokenUser;
+
     res.redirect('/user/password/reset');
 }
 

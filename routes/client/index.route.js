@@ -13,7 +13,7 @@ const settingMiddleware=require('../../middleware/admin/setting.middleware');
 module.exports.index = (app)=>{
     app.use(cartMiddleware);
     app.use(categoryMiddleware);
-    app.use(userMiddleware);
+    app.use(userMiddleware.infoUser);
     app.use(settingMiddleware);
     app.use('/', homeRoute);
     app.use('/products', productRoute);
@@ -21,5 +21,5 @@ module.exports.index = (app)=>{
     app.use('/cart', cartRoute);
     app.use('/checkout', checkoutRoute);
     app.use('/user', userRoute);
-    app.use('/chat',chatRoute)   
+    app.use('/chat',userMiddleware.requireAuth,chatRoute)   
 }

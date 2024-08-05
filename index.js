@@ -17,14 +17,12 @@ const database=require('./config/database');//Nhúng file cấu hình database v
 database.connect();//Kết nối database
 
 
-//Khởi tạo server socket.io
+//Socket io
 const { Server } = require("socket.io");
 const io = new Server(server);// tạo ra một server socket.io
-
-io.on('connection', (socket) => {
-    console.log('Có 1 người dùng',socket.id);
-})
-
+//Biến toan cục -> Chỉ áp dụng cho file js
+global._io=io;
+//End socket io
 
 
 //Phần flash -> Để hiển thị thông báo (Quan trọng phải có)
@@ -58,7 +56,7 @@ app.use('/tinymce', express.static(path.join(__dirname, 'node_modules', 'tinymce
 
 
 
-//Local variable -> Chỉ áp dụng cho file pug
+//Biến toan cục -> Chỉ áp dụng cho file pug
 app.locals.prefixAdmin=systemConfig.prefixAdmin;
 
 routeClient.index(app);
