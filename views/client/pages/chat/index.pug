@@ -9,7 +9,7 @@ block content
 
     .row
       .col-12
-        .chat(my-id=user.id)
+        div(class='chat' my-id=user.id)
           .inner-body
             each chat in chats
               div(class=chat.userId===user.id?'inner-outgoing':'inner-incoming')
@@ -17,6 +17,7 @@ block content
                   .inner-name #{chat.fullName}
                 .inner-content
                   | #{chat.content}
+            div(class="inner-list-typing")
           .inner-foot
             form(
               class="inner-form"

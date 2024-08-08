@@ -10,18 +10,21 @@ if(bodyChat){
 
 //Sư kiện 1 phía
 const formSendMessage=document.querySelector('[send-message]');
-formSendMessage.addEventListener('submit',(e)=>{
-    e.preventDefault();
-    const message=e.target.elements[0].value;
-    if(message.trim()!==''){
-        socket.emit('CLIENT_SEND_MESSAGE',message);
-        e.target.elements[0].value='';
-    }
-    
-})
+if(formSendMessage){
+    formSendMessage.addEventListener('submit',(e)=>{
+        e.preventDefault();
+        const message=e.target.elements[0].value;
+        if(message.trim()!==''){
+            socket.emit('CLIENT_SEND_MESSAGE',message);
+            e.target.elements[0].value='';
+        }
+        
+    })
+}
 
 //Sự kiện cho tất cả mọi nên viêt cẩn thận
 socket.on('SERVER_RETURN_MESSAGE', (data) => {
+    const listTyping=document.querySelector('.chat .inner-list-typing');
     const idUserCurrent=document.querySelector('[my-id]').getAttribute('my-id');
     const newDiv=document.createElement('div');
     if(data.userId===idUserCurrent){
@@ -34,7 +37,7 @@ socket.on('SERVER_RETURN_MESSAGE', (data) => {
         <div class="inner-content">${data.content}</div>`
     }
     const innerBodyChat=document.querySelector('.chat .inner-body');
-    innerBodyChat.appendChild(newDiv);
+    innerBodyChat.insertBefore(newDiv,listTyping);
     if(data.userId===idUserCurrent){
         innerBodyChat.scrollTop=innerBodyChat.scrollHeight
     }
@@ -58,3 +61,44 @@ if(buttonIcon && tooltip){
         tooltip.classList.toggle('shown');
     })
 }
+
+
+//Typing event 
+    //Khó 
+if(formSendMessage){
+    const inputMessage=formSendMessage.querySelector('input');
+    var typingTimeOut;
+    if(inputMessage){
+        inputMessage.addEventListener('keyup',()=>{
+            socket.emit('CLIENT_SEND_TYPING',"show");
+            clearTimeout(typingTimeOut);
+            typingTimeOut=setTimeout(()=>{
+                socket.emit('CLIENT_SEND_TYPING',"hidden");
+            },3000)
+        })
+    }
+}
+
+
+socket.on('SERVER_RETURN_TYPING',(data)=>{
+    const listTyping=document.querySelector('.chat .inner-list-typing');
+    if(data.type==='show'){
+        const existDiv=listTyping.querySelector(`[user-id="${data.userId}"]`);//Kiểm tra xem đã có div này chưa
+        if(!existDiv){
+            const newDiv=document.createElement('div');
+            newDiv.classList.add('box-typing');
+            newDiv.setAttribute('user-id',data.userId);
+            newDiv.innerHTML=`
+                <div class="inner-name">${data.fullName}</div>
+                <div class="inner-dots"><span></span><span></span><span></span></div>
+            `
+            listTyping.appendChild(newDiv);
+        }
+    }else{
+        const existDiv=listTyping.querySelector(`[user-id="${data.userId}"]`);
+        if(existDiv){
+            listTyping.removeChild(existDiv);
+        }
+    }
+
+})
