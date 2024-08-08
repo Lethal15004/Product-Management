@@ -1,3 +1,4 @@
+import * as Popper from 'https://cdn.jsdelivr.net/npm/@popperjs/core@^2/dist/esm/index.js';
 var socket=io();
 
 //Sự kiện thanh kéo cho chat
@@ -39,3 +40,21 @@ socket.on('SERVER_RETURN_MESSAGE', (data) => {
     }
 })
 
+
+// Add icon in chat
+const emojiPicker= document.querySelector('emoji-picker');
+if(emojiPicker){
+    emojiPicker.addEventListener('emoji-click',(e)=>{
+        formSendMessage.elements[0].value+=e.detail.unicode;
+    })
+}
+
+//Show Popup Icon
+const buttonIcon=document.querySelector('[button-icon]');
+const tooltip=document.querySelector('.tooltip');
+if(buttonIcon && tooltip){
+    Popper.createPopper(buttonIcon, tooltip)
+    buttonIcon.addEventListener('click',()=>{
+        tooltip.classList.toggle('shown');
+    })
+}
