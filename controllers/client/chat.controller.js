@@ -1,25 +1,41 @@
 const Chat=require('../../models/client/chat.model');
 const User=require('../../models/client/user.model');
+
+//helpers
+const streamUpload=require('../../helpers/streamUpload.helper');
+
 module.exports.pageChat=async(req,res)=>{
     //Socket io
     const id=res.locals.user.id;
     const fullName=res.locals.user.fullName;
 
     _io.once('connection', (socket) => {
+
         //Receive message from client
-        socket.on('CLIENT_SEND_MESSAGE', async (message) => {
-            const data={
+        socket.on('CLIENT_SEND_MESSAGE', async (data) => {
+
+            const dataSave={
                 userId:id,
-                content:message,
+                content:data.message,
             }
-            const chat=new Chat(data);
+
+            const linkImages=[];
+            for(const image of data.images){
+                const link=await streamUpload(image);
+                linkImages.push(link.url);
+            }
+            dataSave.images=linkImages;
+
+            const chat=new Chat(dataSave);
             await chat.save();
 
             _io.emit('SERVER_RETURN_MESSAGE', {
                 userId:id,
-                content:message,
-                fullName:fullName
+                content:data.message,
+                fullName:fullName,
+                images:linkImages
             });
+
         })
 
         //Typing from client
@@ -31,7 +47,7 @@ module.exports.pageChat=async(req,res)=>{
             })
         })
     })
-    
+
 
     const chats=await Chat.find({});
     for(const chat of chats){

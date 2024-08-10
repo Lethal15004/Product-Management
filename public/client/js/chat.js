@@ -1,6 +1,7 @@
 import * as Popper from 'https://cdn.jsdelivr.net/npm/@popperjs/core@^2/dist/esm/index.js';
 var socket=io();
 
+
 //Sự kiện thanh kéo cho chat
 const bodyChat=document.querySelector('.chat .inner-body');
 if(bodyChat){
@@ -11,14 +12,26 @@ if(bodyChat){
 //Sư kiện 1 phía
 const formSendMessage=document.querySelector('[send-message]');
 if(formSendMessage){
+
+    const upload = new FileUploadWithPreview.FileUploadWithPreview('upload-images',{
+        multiple: true,
+        maxFileCount: 6,
+    });// Phần này là thư viện của file-upload-with-preview upload nhiều ảnh
+
     formSendMessage.addEventListener('submit',(e)=>{
         e.preventDefault();
+        const images=upload.cachedFileArray;
         const message=e.target.elements[0].value;
-        if(message.trim()!==''){
-            socket.emit('CLIENT_SEND_MESSAGE',message);
+        if(message.trim()!=='' || images.length>0){
+            socket.emit('CLIENT_SEND_MESSAGE',{
+                message:message,
+                images:images
+            });
             e.target.elements[0].value='';
+            upload.resetPreviewPanel();
+            socket.emit('CLIENT_SEND_TYPING',"hidden");
+
         }
-        
     })
 }
 
@@ -27,15 +40,34 @@ socket.on('SERVER_RETURN_MESSAGE', (data) => {
     const listTyping=document.querySelector('.chat .inner-list-typing');
     const idUserCurrent=document.querySelector('[my-id]').getAttribute('my-id');
     const newDiv=document.createElement('div');
+    let htmlFullName='';
+    let htmlContent='';
+    let htmlImages='';
+
     if(data.userId===idUserCurrent){
         newDiv.classList.add('inner-outgoing');
-        newDiv.innerHTML=`<div class="inner-content">${data.content}</div>`
     }else{
         newDiv.classList.add('inner-incoming');
-        newDiv.innerHTML=`
-        <div class="inner-name">${data.fullName}</div>
-        <div class="inner-content">${data.content}</div>`
+        htmlFullName=`<div class="inner-name">${data.fullName}</div>`;
     }
+
+    if(data.content.trim()!==''){
+        htmlContent=`<div class="inner-content">${data.content}</div>`;
+    }
+    
+    if(data.images.length>0){
+        htmlImages+=`<div class="inner-images">`;
+        for(const image of data.images){
+            htmlImages+=`<img src="${image}" alt="image">`
+        }
+        htmlImages+=`</div>`;
+    }
+
+    newDiv.innerHTML=`
+            ${htmlFullName}
+            ${htmlContent}
+            ${htmlImages}
+        `
     const innerBodyChat=document.querySelector('.chat .inner-body');
     innerBodyChat.insertBefore(newDiv,listTyping);
     if(data.userId===idUserCurrent){
