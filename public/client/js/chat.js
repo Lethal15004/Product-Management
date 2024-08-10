@@ -73,6 +73,7 @@ socket.on('SERVER_RETURN_MESSAGE', (data) => {
     if(data.userId===idUserCurrent){
         innerBodyChat.scrollTop=innerBodyChat.scrollHeight
     }
+    new Viewer(newDiv);
 })
 
 
@@ -134,3 +135,8 @@ socket.on('SERVER_RETURN_TYPING',(data)=>{
     }
 
 })
+
+// Preview Image
+if(bodyChat){
+    new Viewer(bodyChat);
+}
