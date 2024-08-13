@@ -3,8 +3,19 @@ const Product=require('../../models/admin/product.model');
 
 const moment = require('moment');  
 module.exports.index= async (req,res)=>{
-    const orders= await Order.find();
+    const find={}
+    if(req.query.status){
+        find.status=req.query.status
+    }
+    if(req.query.keyword){
+        const fullName=new RegExp(req.query.keyword,'i');
+        find['userInfo.fullName']=fullName;
+    }
     const buttonFilters=[
+        {
+            status:"",
+            title:"Tất cả"
+        },
         {
             status:"pending",
             title:"Chờ xác nhận"
@@ -18,6 +29,7 @@ module.exports.index= async (req,res)=>{
             title:"Đã hủy"
         }
     ]
+    const orders= await Order.find(find);
     for(const order of orders){
         let totalMoney=0;
         for(const item of order.products){
@@ -30,7 +42,9 @@ module.exports.index= async (req,res)=>{
     res.render('admin/pages/orders/index',{
         title:"Danh sách đơn hàng",
         orders:orders,
-        buttonFilters:buttonFilters
+        buttonFilters:buttonFilters,
+        status:find.status,
+        keyword:req.query.keyword
     })
 }
 
