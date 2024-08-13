@@ -136,6 +136,10 @@ module.exports.permissionsPage=async (req,res)=>{
             title:'Tài khoản admin',
             data: 'accounts' 
         },
+        {
+            title:'Đơn hàng',
+            data: 'orders'
+        }
     ]
     res.render(`${systemConfig.prefixAdmin}/pages/roles/role-permissions`,{
         title:'Phân quyền',

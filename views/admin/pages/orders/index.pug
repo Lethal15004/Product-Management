@@ -3,67 +3,70 @@ include ../../mixins/pagination.pug
 include ../../mixins/filter-buttons.pug
 include ../../mixins/search-component.pug
 block content
-    h2 #{title}
-    .card.mb-3
-        .card-header Bộ lọc và Tìm kiếm
-        .card-body
-          .row
-            .col-6
-              //- Bộ lọc bên mixins
-              +filter-status(buttonFilters)
-            .col-6
-              //- Tìm kiếm bên mixins
-              +search(keyword)
-    .card.mb-3
-        .card-header Danh sách đơn hàng
-        .card-body
-            table(
-              class="table table-hover table-sm"
-            )
-                thead
-                    tr
-                        th STT
-                        th Họ tên
-                        th Điện thoại
-                        th Trạng thái
-                        th Ngày tạo 
-                        th Tổng tiền
-                        th Hành động
-                tbody
-                    each order,index in orders
+    if(roleUser.permissions.includes('orders_view'))
+        h2 #{title}
+        .card.mb-3
+            .card-header Bộ lọc và Tìm kiếm
+            .card-body
+                .row
+                    .col-6
+                        //- Bộ lọc bên mixins
+                        +filter-status(buttonFilters)
+                    .col-6
+                        //- Tìm kiếm bên mixins
+                        +search(keyword)
+        .card.mb-3
+            .card-header Danh sách đơn hàng
+            .card-body
+                table(
+                class="table table-hover table-sm"
+                )
+                    thead
                         tr
-                            td #{index + 1}
-                            td #{order.userInfo.fullName}
-                            td #{order.userInfo.phone}
-                            td
-                                if(order.status==='pending')
-                                    div(
-                                        class="badge badge-warning"
-                                        data-status="pending"
-                                    ) Chờ xác nhận
-                                else if (order.status==='accepted')
-                                    div(
-                                        class="badge badge-success"
-                                        data-status="accepted"
-                                    ) Đã xác nhận
-                                else 
-                                    div(
-                                        class="badge badge-danger"
-                                        data-status="cancelled"
-                                    ) Đã hủy
-                            td #{order.createdAtFormat}
-                            td #{order.totalMoney} $
-                            td
-                                a(
-                                    class="btn btn-secondary btn-sm"
-                                    href=`/${prefixAdmin}/orders/detail/${order.id}`
-                                ) Chi tiết
-                                if(order.status==='pending')
-                                    button(
-                                        class="btn btn-success btn-sm ml-1"
-                                        orders-button-accept=`/${prefixAdmin}/orders/accept/${order.id}`
-                                    ) Xác nhận
-                                    button(
-                                        class="btn btn-danger btn-sm ml-1"
-                                        orders-button-cancel=`/${prefixAdmin}/orders/cancel/${order.id}`
-                                    ) Hủy đơn 
+                            th STT
+                            th Họ tên
+                            th Điện thoại
+                            th Trạng thái
+                            th Ngày tạo 
+                            th Tổng tiền
+                            th Hành động
+                    tbody
+                        each order,index in orders
+                            tr
+                                td #{index + 1}
+                                td #{order.userInfo.fullName}
+                                td #{order.userInfo.phone}
+                                td
+                                    if(order.status==='pending')
+                                        div(
+                                            class="badge badge-warning"
+                                            data-status="pending"
+                                        ) Chờ xác nhận
+                                    else if (order.status==='accepted')
+                                        div(
+                                            class="badge badge-success"
+                                            data-status="accepted"
+                                        ) Đã xác nhận
+                                    else 
+                                        div(
+                                            class="badge badge-danger"
+                                            data-status="cancelled"
+                                        ) Đã hủy
+                                td #{order.createdAtFormat}
+                                td #{order.totalMoney} $
+                                td
+                                    a(
+                                        class="btn btn-secondary btn-sm"
+                                        href=`/${prefixAdmin}/orders/detail/${order.id}`
+                                    ) Chi tiết
+                                    if(order.status==='pending')
+                                        if(roleUser.permissions.includes('orders_accept'))
+                                            button(
+                                                class="btn btn-success btn-sm ml-1"
+                                                orders-button-accept=`/${prefixAdmin}/orders/accept/${order.id}`
+                                            ) Xác nhận
+                                        if(roleUser.permissions.includes('orders_cancel'))
+                                            button(
+                                                class="btn btn-danger btn-sm ml-1"
+                                                orders-button-cancel=`/${prefixAdmin}/orders/cancel/${order.id}`
+                                            ) Hủy đơn 

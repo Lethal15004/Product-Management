@@ -76,50 +76,66 @@ module.exports.detail= async (req,res)=>{
     }
 }
 
-module.exports.accept= async (req,res)=>{   
-    try{
-        const id =req.params.id;
-        const order= await Order.findOne({_id:id});
-        if(order.status !=='pending'){
+module.exports.accept= async (req,res)=>{
+    if(res.locals.roleUser.permissions.includes('orders_accept')){
+        try{
+            const id =req.params.id;
+            const order= await Order.findOne({_id:id});
+            if(order.status !=='pending'){
+                res.json({
+                    code:404,
+                    message:"Đơn hàng này đã được xác nhận hoặc đã bị hủy."
+                });
+                return;
+            }
+            await Order.updateOne({_id:id},{status:'accepted'});
+            res.json({
+                code:200,
+                message:"Đơn hàng này đã được xác nhận."
+            });
+        }catch(error){
             res.json({
                 code:404,
-                message:"Đơn hàng này đã được xác nhận hoặc đã bị hủy."
-            });
-            return;
+                message:"Lỗi: "+error
+            })
         }
-        await Order.updateOne({_id:id},{status:'accepted'});
-        res.json({
-            code:200,
-            message:"Đơn hàng này đã được xác nhận."
-        });
-    }catch(error){
+    } else{
         res.json({
             code:404,
-            message:"Lỗi: "+error
+            message:"Bạn không có quyền thực hiện chức năng này."
         })
-    }
+    } 
+
 }
 
-module.exports.cancel= async (req,res)=>{   
-    try{
-        const id =req.params.id;
-        const order= await Order.findOne({_id:id});
-        if(order.status !=='pending'){
+module.exports.cancel= async (req,res)=>{
+    if(res.locals.roleUser.permissions.includes('orders_cancel')){
+        try{
+            const id =req.params.id;
+            const order= await Order.findOne({_id:id});
+            if(order.status !=='pending'){
+                res.json({
+                    code:404,
+                    message:"Đơn hàng này đã được xác nhận hoặc đã bị hủy."
+                });
+                return;
+            }
+            await Order.updateOne({_id:id},{status:'cancelled',expireAt: Date.now() + 24*60*60*1000});
+            res.json({
+                code:200,
+                message:"Đơn hàng này đã bị hủy"
+            });
+        }catch(error){
             res.json({
                 code:404,
-                message:"Đơn hàng này đã được xác nhận hoặc đã bị hủy."
-            });
-            return;
+                message:"Lỗi: "+error
+            })
         }
-        await Order.updateOne({_id:id},{status:'cancelled',expireAt: Date.now() + 24*60*60*1000});
-        res.json({
-            code:200,
-            message:"Đơn hàng này đã bị hủy"
-        });
-    }catch(error){
+    } else{
         res.json({
             code:404,
-            message:"Lỗi: "+error
+            message:"Bạn không có quyền thực hiện chức năng này."
         })
     }
+ 
 }

@@ -14,6 +14,7 @@ router.get('/',roleController.index);
 router.get('/create',roleController.createPage);
 router.get('/edit/:id',roleController.editPage);
 router.get('/detail/:id',roleController.detailPage);
+
 router.get('/permissions',roleController.permissionsPage);
 
 //[POST]
