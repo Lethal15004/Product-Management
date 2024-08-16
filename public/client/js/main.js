@@ -1,3 +1,4 @@
+var socket=io();
 //Button pagination
 const listButtonPagination=document.querySelectorAll('[button-pagination]');
 if(listButtonPagination.length>0){

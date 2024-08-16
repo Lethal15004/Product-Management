@@ -76,7 +76,7 @@ module.exports.detail= async (req,res)=>{
     }
 }
 
-module.exports.accept= async (req,res)=>{
+module.exports.accept= async (req,res)=>{   
     if(res.locals.roleUser.permissions.includes('orders_accept')){
         try{
             const id =req.params.id;

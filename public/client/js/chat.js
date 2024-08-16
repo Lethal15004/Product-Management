@@ -1,6 +1,4 @@
 import * as Popper from 'https://cdn.jsdelivr.net/npm/@popperjs/core@^2/dist/esm/index.js';
-var socket=io();
-
 
 //Sự kiện thanh kéo cho chat
 const bodyChat=document.querySelector('.chat .inner-body');

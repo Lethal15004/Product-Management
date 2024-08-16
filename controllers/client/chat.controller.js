@@ -4,9 +4,9 @@ const User=require('../../models/client/user.model');
 //helpers
 const streamUpload=require('../../helpers/streamUpload.helper');
 
-
 //socket io
 const chatSocket=require('../../sockets/client/chat.socket');
+
 module.exports.pageChat=async(req,res)=>{
     chatSocket(req,res);
     const chats=await Chat.find({});
