@@ -5,4 +5,5 @@ const userController=require('../../controllers/client/users.controller');
 
 router.get('/not-friend',userController.notFriend);
 router.get('/request',userController.request);
+router.get('/accept',userController.accept);
 module.exports=router;
