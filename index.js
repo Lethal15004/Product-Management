@@ -4,6 +4,7 @@ const path = require('path');//Nhúng path vào dự án
 const http = require('http');
 const server = http.createServer(app);//Tạo ra một server http
 require('dotenv').config()//Nhúng file .env vào dự án
+
 const methodOverride = require('method-override') //Nhúng method-override vào dự án
 const flash= require('express-flash');//Nhúng flash vào dự án
 const cookieParser = require('cookie-parser');//Nhúng cookie-parser vào dự án
@@ -62,7 +63,7 @@ app.locals.prefixAdmin=systemConfig.prefixAdmin;
 routeClient.index(app);
 adminRoute.index(app);
 
-
+//Đường dẫn không tồn tại
 app.get('*',(req,res)=>{
     res.render('client/pages/errors/404',{
         title:'404'
