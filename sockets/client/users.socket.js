@@ -7,7 +7,7 @@ module.exports=(req,res)=>{
     _io.once('connection', (socket) => {
          // Khi A gửi yêu cầu cho B
         socket.on('CLIENT_ADD_FRIEND',async (userIdB)=>{
-             // Thêm id của A vào acceptFriends của B
+             // Thêm id của B vào requestFriends của A
             const userBInA=await User.findOne({
                 _id:userIdA,
                 requestFriends:userIdB,
@@ -21,7 +21,7 @@ module.exports=(req,res)=>{
                     }
                 })
             }
-            // Thêm id của B vào requestFriends của A 
+            // Thêm id của A vào acceptFriends của B
             const userAInB=await User.findOne({
                 _id:userIdB,
                 acceptFriends:userIdA,
@@ -40,7 +40,8 @@ module.exports=(req,res)=>{
 
         // Chức năng hủy gửi yêu cầu
         socket.on('CLIENT_CANCEL_ADD_FRIEND',async (userIdB)=>{
-            // Xóa id của A trong acceptFriends của B
+
+            // Xóa id của B trong requestFriends của A
             const userBInA=await User.findOne({
                 _id:userIdA,
                 requestFriends:userIdB,
@@ -55,7 +56,7 @@ module.exports=(req,res)=>{
                 })
             }
 
-            // Xóa id của B trong requestFriends của A 
+            // Xóa id của A trong acceptFriends của B
             const userAInB=await User.findOne({
                 _id:userIdB,
                 acceptFriends:userIdA,
@@ -74,7 +75,7 @@ module.exports=(req,res)=>{
 
          // Chức năng từ chối kết bạn
         socket.on('CLIENT_REFUSE_FRIEND',async (userIdB)=>{
-            // Xóa id của B trong acceptFriends của A
+            // Xóa id của A trong acceptFriends của B
             const userBInA=await User.findOne({
                 _id:userIdA,
                 acceptFriends:userIdB,
@@ -89,7 +90,7 @@ module.exports=(req,res)=>{
                 })
             }
 
-            // Xóa id của A trong requestFriends của B
+            // Xóa id của B trong requestFriends của A
             const userAInB=await User.findOne({
                 _id:userIdB,
                 requestFriends:userIdA,
@@ -105,6 +106,48 @@ module.exports=(req,res)=>{
             }
         })
         // Hết Chức năng từ chối kết bạn
-
+        
+        // Chức năng chấp nhận kết bạn
+        socket.on('CLIENT_ACCEPT_FRIEND',async (userIdB)=>{
+            const userBInA=await User.findOne({
+                _id:userIdA,
+                acceptFriends:userIdB,
+            })
+            if(userBInA){
+                await User.updateOne({
+                    _id:userIdA,
+                },{
+                    $push:{
+                        listFriends:{
+                            userId:userIdB,
+                            roomChatId:''
+                        }
+                    },
+                    $pull:{
+                        acceptFriends:userIdB,
+                    }
+                })
+            }
+            const userAInB=await User.findOne({
+                _id:userIdB,
+                requestFriends:userIdA,
+            })
+            if(userAInB){
+                await User.updateOne({
+                    _id:userIdB
+                },{
+                    $push:{
+                        listFriends:{
+                            userId:userIdA,
+                            roomChatId:''
+                        }
+                    },
+                    $pull:{
+                        requestFriends:userIdA,
+                    }
+                })
+            }
+        })
+        // Hết Chức năng chấp nhận kết bạn
     })
 }

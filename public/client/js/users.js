@@ -33,3 +33,15 @@ if(listBtnRefuseFriend){
         })
     })
 }
+
+
+const listBtnAcceptFriend=document.querySelectorAll('[btn-accept-friend]');
+if(listBtnAcceptFriend){
+    listBtnAcceptFriend.forEach(btn=>{
+        btn.addEventListener('click',async (e)=>{
+            btn.closest('.box-user').classList.add('accepted');
+            const userId=btn.getAttribute('btn-accept-friend');
+            socket.emit('CLIENT_ACCEPT_FRIEND',userId);
+        })
+    })
+}
