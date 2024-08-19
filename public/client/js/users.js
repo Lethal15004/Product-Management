@@ -53,7 +53,7 @@ if(listBtnAcceptFriend){
 }
 
 
-//Chức năng cập nhật số lượng Lời mời đã nhận
+//Chức năng cập nhật số lượng khi A gửi kết bạn trong trang Lời mời đã nhận
 socket.on('SERVER_RETURN_LENGTH_ACCEPT_FRIEND',(userB)=>{
     const id=userB._id;
     const badgeUsersAccept =document.querySelector(`[badge-users-accept="${id}"]`);
@@ -62,11 +62,13 @@ socket.on('SERVER_RETURN_LENGTH_ACCEPT_FRIEND',(userB)=>{
     }
 })
 
+//Chức năng thêm mới user khi A gửi kết bạn trong trang Lời mời đã nhận
 socket.on('SERVER_RETURN_INFO_ACCEPT_FRIEND',data=>{
     const rowElement=document.querySelector(`[data-users-accept="${data.userIdB}"]`);
     if(rowElement){
         const newUser=document.createElement('div');
         newUser.classList.add('col-6');
+        newUser.setAttribute('user-id',data.infoA._id);
         newUser.innerHTML=
         `
         <div class="box-user add">
@@ -126,6 +128,15 @@ socket.on('SERVER_RETURN_INFO_ACCEPT_FRIEND',data=>{
             })
         }
     }
-    
+})
 
+//Chức năng xóa user khi A hủy gửi yêu cầu kết bạn trong trang Lời mời đã nhận
+socket.on('SERVER_RETURN_ID_CANCEL_FRIEND',(data)=>{
+    const rowElement=document.querySelector(`[data-users-accept="${data.userIdB}"]`);
+    if(rowElement){
+        const userElement=rowElement.querySelector(`[user-id="${data.userIdA}"]`);
+        if(userElement){
+            rowElement.removeChild(userElement);
+        }
+    }
 })

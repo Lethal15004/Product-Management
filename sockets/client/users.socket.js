@@ -57,7 +57,7 @@ module.exports=(req,res)=>{
         })
         // End Khi A gửi yêu cầu cho B
 
-        // Chức năng hủy gửi yêu cầu
+        // Chức năng A hủy gửi yêu cầu
         socket.on('CLIENT_CANCEL_ADD_FRIEND',async (userIdB)=>{
 
             // Xóa id của B trong requestFriends của A
@@ -97,9 +97,16 @@ module.exports=(req,res)=>{
                 deleted:false,
             }).select('acceptFriends');
             socket.broadcast.emit('SERVER_RETURN_LENGTH_ACCEPT_FRIEND',userB)
+
+            // Trả về cho B id của A
+            socket.broadcast.emit('SERVER_RETURN_ID_CANCEL_FRIEND',{
+                userIdB:userIdB,
+                userIdA:userIdA,
+            })
         })
          // Hết Chức năng hủy gửi yêu cầu
 
+         
          // Chức năng từ chối kết bạn
         socket.on('CLIENT_REFUSE_FRIEND',async (userIdB)=>{
             // Xóa id của A trong acceptFriends của B
