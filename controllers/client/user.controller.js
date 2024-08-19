@@ -60,11 +60,31 @@ module.exports.login= async (req,res)=>{
         return;
     }
     res.cookie('tokenUser',user.tokenUser);
+    await User.updateOne({
+        email:email,
+        status:'active',
+        deleted:false
+    },{
+        statusOnline:'online'
+    })
     req.flash('success','Đăng nhập thành công');
     res.redirect('/');
 }
 
 module.exports.logout= async (req,res)=>{
+    try {
+        await User.updateOne({
+            tokenUser:req.cookies.tokenUser,
+            status:'active',
+            deleted:false
+         },{
+              statusOnline:'offline'
+         })
+    } catch (error) {
+        req.flash('error','Lỗi chưa đăng nhập');
+        res.redirect('/user/login');
+        return;
+    }
     res.clearCookie('tokenUser');
     req.flash('success','Đăng xuất thành công');
     res.redirect('/user/login');

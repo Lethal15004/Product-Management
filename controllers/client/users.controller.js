@@ -66,7 +66,7 @@ module.exports.friends = async (req, res) => {
         _id:{$in:newListFriends},
         status: 'active',
         deleted:false,
-    }).select('fullName email');
+    }).select('fullName email statusOnline');
     res.render('client/pages/users/friends', {
         title:'Danh sách bạn bè',
         users: users,
