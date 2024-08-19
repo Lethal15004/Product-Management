@@ -10,7 +10,7 @@ block content
       .col-12
         +box-head(title)
 
-    .row
+    .row(data-users-accept=user.id)
         each user in users 
             .col-6
                 div(class="box-user add")

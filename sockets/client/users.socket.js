@@ -3,7 +3,7 @@ const User=require('../../models/client/user.model');
 //helpers
 module.exports=(req,res)=>{
     const userIdA=res.locals.user.id;
-    
+    const fullName=res.locals.user.fullName;
     _io.once('connection', (socket) => {
          // Khi A gửi yêu cầu cho B
         socket.on('CLIENT_ADD_FRIEND',async (userIdB)=>{
@@ -43,6 +43,17 @@ module.exports=(req,res)=>{
                 deleted:false,
             }).select('acceptFriends');
             socket.broadcast.emit('SERVER_RETURN_LENGTH_ACCEPT_FRIEND',userB)
+
+             // Lấy thông của A để trả về cho B
+            const infoA=await User.findOne({
+                _id:userIdA,
+                status: 'active',
+                deleted:false,
+            }).select("fullName avatar")
+            socket.broadcast.emit('SERVER_RETURN_INFO_ACCEPT_FRIEND',{
+                userIdB:userIdB,
+                infoA:infoA
+            })
         })
         // End Khi A gửi yêu cầu cho B
 
