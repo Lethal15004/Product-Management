@@ -46,6 +46,8 @@ if(listBtnAcceptFriend){
     })
 }
 
+
+//Chức năng cập nhật số lượng Lời mời đã nhận
 socket.on('SERVER_RETURN_LENGTH_ACCEPT_FRIEND',(userB)=>{
     const id=userB._id;
     const badgeUsersAccept =document.querySelector(`[badge-users-accept="${id}"]`);
