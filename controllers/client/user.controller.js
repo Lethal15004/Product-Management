@@ -67,6 +67,13 @@ module.exports.login= async (req,res)=>{
     },{
         statusOnline:'online'
     })
+    //Trả lại cho bạn bè trạng thái online của A
+    _io.once('connection',(socket)=>{
+        socket.broadcast.emit('SERVER_RETURN_USER_ONLINE',{
+            statusOnline:'online',
+            id:user._id
+        })
+    })
     req.flash('success','Đăng nhập thành công');
     res.redirect('/');
 }
@@ -85,6 +92,14 @@ module.exports.logout= async (req,res)=>{
         res.redirect('/user/login');
         return;
     }
+
+    //Trả lại cho bạn bè trạng thái offline của A
+    _io.once('connection',(socket)=>{
+        socket.broadcast.emit('SERVER_RETURN_USER_ONLINE',{
+            statusOnline:'offline',
+            id:res.locals.user.id
+        })
+    })
     res.clearCookie('tokenUser');
     req.flash('success','Đăng xuất thành công');
     res.redirect('/user/login');

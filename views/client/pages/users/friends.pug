@@ -10,9 +10,9 @@ block content
       .col-12
         +box-head(title)
 
-    .row
+    .row(data-users-friend)
         each user in users 
-            .col-6
+            .col-6(user-id=user.id)
                 div(class="box-user add")
                     div(class="inner-avatar")
                         img(

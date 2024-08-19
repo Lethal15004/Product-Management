@@ -159,3 +159,16 @@ socket.on('SERVER_RETURN_ID_ACCEPT_FRIEND',(data)=>{
     }
 })
 //Hết chức năng xóa user A khỏi trang Danh sách người dùng của B khi A gửi kết bạn
+
+
+//Hiển thị online và offline
+socket.on('SERVER_RETURN_USER_ONLINE',(data)=>{
+    const rowElement=document.querySelector(`[data-users-friend]`);
+    if(rowElement){
+        const userElement=rowElement.querySelector(`[user-id="${data.id}"]`);
+        if(userElement){
+            const statusElement=userElement.querySelector(`[status]`);
+            statusElement.setAttribute('status',data.statusOnline);
+        }
+    }
+})
