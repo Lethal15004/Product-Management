@@ -36,7 +36,7 @@ module.exports=(req,res)=>{
                 })
             }
 
-            // Trả về cho B độ dài của acceptFriends
+            // Trả về cho trang Lời mời đã nhận của B độ dài của acceptFriends
             const userB=await User.findOne({
                 _id:userIdB,
                 status: 'active',
@@ -44,7 +44,7 @@ module.exports=(req,res)=>{
             }).select('acceptFriends');
             socket.broadcast.emit('SERVER_RETURN_LENGTH_ACCEPT_FRIEND',userB)
 
-             // Lấy thông của A để trả về cho B
+             // Lấy thông tin của A để vẽ ở trang Lời mời đã nhận của B
             const infoA=await User.findOne({
                 _id:userIdA,
                 status: 'active',
@@ -53,6 +53,12 @@ module.exports=(req,res)=>{
             socket.broadcast.emit('SERVER_RETURN_INFO_ACCEPT_FRIEND',{
                 userIdB:userIdB,
                 infoA:infoA
+            })
+
+            //Xóa user A ở trang Danh sách người dùng của B
+            socket.broadcast.emit('SERVER_RETURN_ID_ACCEPT_FRIEND',{
+                userIdB:userIdB,
+                userIdA:userIdA,
             })
         })
         // End Khi A gửi yêu cầu cho B
@@ -106,7 +112,7 @@ module.exports=(req,res)=>{
         })
          // Hết Chức năng hủy gửi yêu cầu
 
-         
+
          // Chức năng từ chối kết bạn
         socket.on('CLIENT_REFUSE_FRIEND',async (userIdB)=>{
             // Xóa id của A trong acceptFriends của B

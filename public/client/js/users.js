@@ -9,6 +9,7 @@ if(listBtnAddFriend){
         })
     })
 }
+//Hết chức năng gửi yêu cầu kết bạn trong trang Danh sách người dùng
 
 //Chức năng hủy yêu cầu kết bạn trong trang Lời mời đã gửi
 const listBtnCancelAddFriend=document.querySelectorAll('[btn-cancel-friend]');
@@ -21,6 +22,7 @@ if(listBtnCancelAddFriend){
         })
     })
 }
+//Hết chức năng hủy yêu cầu kết bạn trong trang Lời mời đã gửi
 
 //Chức năng từ chối yêu cầu kết bạn trong trang Lời mời đã nhận
 const listBtnRefuseFriend=document.querySelectorAll('[btn-refuse-friend]');
@@ -36,6 +38,7 @@ if(listBtnRefuseFriend){
         })
     })
 }
+//Hết chức năng từ chối yêu cầu kết bạn trong trang Lời mời đã nhận
 
 //Chức năng chấp nhận yêu cầu kết bạn trong trang Lời mời đã nhận
 const listBtnAcceptFriend=document.querySelectorAll('[btn-accept-friend]');
@@ -51,6 +54,7 @@ if(listBtnAcceptFriend){
         })
     })
 }
+//Hết chức năng chấp nhận yêu cầu kết bạn trong trang Lời mời đã nhận
 
 
 //Chức năng cập nhật số lượng khi A gửi kết bạn trong trang Lời mời đã nhận
@@ -61,6 +65,7 @@ socket.on('SERVER_RETURN_LENGTH_ACCEPT_FRIEND',(userB)=>{
         badgeUsersAccept.innerHTML = userB.acceptFriends.length;
     }
 })
+//Hết chức năng cập nhật số lượng khi A gửi kết bạn trong trang Lời mời đã nhận
 
 //Chức năng thêm mới user khi A gửi kết bạn trong trang Lời mời đã nhận
 socket.on('SERVER_RETURN_INFO_ACCEPT_FRIEND',data=>{
@@ -129,8 +134,9 @@ socket.on('SERVER_RETURN_INFO_ACCEPT_FRIEND',data=>{
         }
     }
 })
+//Hết chức năng thêm mới user khi A gửi kết bạn trong trang Lời mời đã nhận
 
-//Chức năng xóa user khi A hủy gửi yêu cầu kết bạn trong trang Lời mời đã nhận
+//Chức năng xóa user khi A hủy gửi yêu cầu kết bạn trong trang Lời mời đã nhận của B
 socket.on('SERVER_RETURN_ID_CANCEL_FRIEND',(data)=>{
     const rowElement=document.querySelector(`[data-users-accept="${data.userIdB}"]`);
     if(rowElement){
@@ -140,3 +146,16 @@ socket.on('SERVER_RETURN_ID_CANCEL_FRIEND',(data)=>{
         }
     }
 })
+//Hết chức năng xóa user khi A hủy gửi yêu cầu kết bạn trong trang Lời mời đã nhận của B
+
+//Chức năng xóa user A khỏi trang Danh sách người dùng của B khi A gửi kết bạn
+socket.on('SERVER_RETURN_ID_ACCEPT_FRIEND',(data)=>{
+    const rowElement=document.querySelector(`[data-users-not-friend="${data.userIdB}"]`);
+    if(rowElement){
+        const userElement=rowElement.querySelector(`[user-id="${data.userIdA}"]`);
+        if(userElement){
+            rowElement.removeChild(userElement);
+        }
+    }
+})
+//Hết chức năng xóa user A khỏi trang Danh sách người dùng của B khi A gửi kết bạn
