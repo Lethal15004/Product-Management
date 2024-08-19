@@ -35,6 +35,14 @@ module.exports=(req,res)=>{
                     }
                 })
             }
+
+            // Trả về cho B độ dài của acceptFriends
+            const userB=await User.findOne({
+                _id:userIdB,
+                status: 'active',
+                deleted:false,
+            }).select('acceptFriends');
+            socket.broadcast.emit('SERVER_RETURN_LENGTH_ACCEPT_FRIEND',userB)
         })
         // End Khi A gửi yêu cầu cho B
 

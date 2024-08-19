@@ -34,7 +34,7 @@ if(listBtnRefuseFriend){
     })
 }
 
-
+//Chức năng chấp nhận yêu cầu kết bạn trong trang Lời mời đã nhận
 const listBtnAcceptFriend=document.querySelectorAll('[btn-accept-friend]');
 if(listBtnAcceptFriend){
     listBtnAcceptFriend.forEach(btn=>{
@@ -45,3 +45,11 @@ if(listBtnAcceptFriend){
         })
     })
 }
+
+socket.on('SERVER_RETURN_LENGTH_ACCEPT_FRIEND',(userB)=>{
+    const id=userB._id;
+    const badgeUsersAccept =document.querySelector(`[badge-users-accept="${id}"]`);
+    if(badgeUsersAccept){
+        badgeUsersAccept.innerHTML = userB.acceptFriends.length;
+    }
+})
