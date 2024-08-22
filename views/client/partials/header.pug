@@ -36,11 +36,13 @@ header.header
               a(href="/cart") Giỏ hàng (#{cartTotal})
             if(user)
               li
-                a(href="/user/logout") Đăng xuất
-              li
                 a(href="/user/profile") Chào #{user.fullName.trim().split(' ').reverse()[0]}
               li
                 a(href="/users/friends") Bạn bè
+              li 
+                a(href="/rooms-chat") Phòng chat
+              li
+                a(href="/user/logout") Đăng xuất
             else
               li
                 a(href="/user/login") Đăng nhập
