@@ -5,5 +5,6 @@ const router=express.Router();
 const roomsChatController=require('../../controllers/client/rooms-chat.controller');
 
 router.get('/',roomsChatController.index);
-
+router.get('/create',roomsChatController.createPage);
+router.post('/create',roomsChatController.create);
 module.exports=router;
