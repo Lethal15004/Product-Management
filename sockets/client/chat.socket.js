@@ -6,13 +6,18 @@ const streamUpload=require('../../helpers/streamUpload.helper');
 module.exports=(req,res)=>{
     const id=res.locals.user.id;
     const fullName=res.locals.user.fullName;
-    
+    const roomChatId=req.params.roomChatId;
     _io.once('connection', (socket) => {
+
+        //Đưa user vào room chat của user đó
+        socket.join(roomChatId);
+
         //Receive message from client
         socket.on('CLIENT_SEND_MESSAGE', async (data) => {
             const dataSave={
                 userId:id,
                 content:data.message,
+                roomChatId:roomChatId
             }
 
             const linkImages=[];
@@ -25,7 +30,7 @@ module.exports=(req,res)=>{
             const chat=new Chat(dataSave);
             await chat.save();
 
-            _io.emit('SERVER_RETURN_MESSAGE', {
+            _io.to(roomChatId).emit('SERVER_RETURN_MESSAGE', {
                 userId:id,
                 content:data.message,
                 fullName:fullName,
@@ -36,7 +41,7 @@ module.exports=(req,res)=>{
 
         //Typing from client
         socket.on('CLIENT_SEND_TYPING',(type)=>{
-            socket.broadcast.emit('SERVER_RETURN_TYPING',{
+            socket.broadcast.to(roomChatId).emit('SERVER_RETURN_TYPING',{
                 userId:id,
                 fullName:fullName,
                 type:type

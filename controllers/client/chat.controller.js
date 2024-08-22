@@ -8,8 +8,11 @@ const streamUpload=require('../../helpers/streamUpload.helper');
 const chatSocket=require('../../sockets/client/chat.socket');
 
 module.exports.pageChat=async(req,res)=>{
+    const roomChatId=req.params.roomChatId;
     chatSocket(req,res);
-    const chats=await Chat.find({});
+    const chats=await Chat.find({
+        roomChatId:roomChatId
+    });
     for(const chat of chats){
         const user=await User.findOne({_id:chat.userId}).select('fullName');
         chat.fullName=user.fullName;
