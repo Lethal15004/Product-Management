@@ -67,6 +67,14 @@ module.exports.friends = async (req, res) => {
         status: 'active',
         deleted:false,
     }).select('fullName email statusOnline');
+
+    for (const user of users){
+        const roomChatId= listFriends.find(friend=>friend.userId==user.id).roomChatId;
+        user.roomChatId=roomChatId;
+    }
+
+
+
     res.render('client/pages/users/friends', {
         title:'Danh sách bạn bè',
         users: users,

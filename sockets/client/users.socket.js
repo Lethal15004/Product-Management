@@ -1,5 +1,5 @@
 const User=require('../../models/client/user.model');
-
+const RoomChat=require('../../models/client/rooms-chat.model');
 //helpers
 module.exports=(req,res)=>{
     const userIdA=res.locals.user.id;
@@ -149,6 +149,22 @@ module.exports=(req,res)=>{
         
         // Chức năng chấp nhận kết bạn
         socket.on('CLIENT_ACCEPT_FRIEND',async (userIdB)=>{
+
+            //Tạo phòng chat giữa 2 người
+            const newRoomChat= new RoomChat({
+                typeRoom:'friend',
+                users:[
+                    {
+                        userId:userIdA,
+                        role:'superAdmin'
+                    },{
+                        userId:userIdB,
+                        role:'superAdmin'
+                    }
+                ]
+            })
+            await newRoomChat.save();
+
             const userBInA=await User.findOne({
                 _id:userIdA,
                 acceptFriends:userIdB,
@@ -160,7 +176,7 @@ module.exports=(req,res)=>{
                     $push:{
                         listFriends:{
                             userId:userIdB,
-                            roomChatId:''
+                            roomChatId:newRoomChat.id
                         }
                     },
                     $pull:{
@@ -179,7 +195,7 @@ module.exports=(req,res)=>{
                     $push:{
                         listFriends:{
                             userId:userIdA,
-                            roomChatId:''
+                            roomChatId:newRoomChat.id
                         }
                     },
                     $pull:{
