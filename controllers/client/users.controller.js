@@ -73,8 +73,6 @@ module.exports.friends = async (req, res) => {
         user.roomChatId=roomChatId;
     }
 
-
-
     res.render('client/pages/users/friends', {
         title:'Danh sách bạn bè',
         users: users,

@@ -1,9 +1,21 @@
 const User=require('../../models/client/user.model');
 const RoomChat=require('../../models/client/rooms-chat.model');  
 module.exports.index=async(req,res)=>{
-    res.render('client/pages/rooms-chat/index.pug',{
-        title: "Danh sách phòng"
-    })
+    try{
+        const userId=res.locals.user.id;
+        const listRoomChat=await RoomChat.find({
+            typeRoom:'group',
+            'users.userId':userId
+        })
+        res.render('client/pages/rooms-chat/index.pug',{
+            title: "Danh sách phòng",
+            listRoomChat:listRoomChat
+        })
+    }catch(error){
+        req.flash('error', 'Lỗi');
+        res.redirect('/rooms-chat')
+    }
+
 }
 
 module.exports.createPage=async(req,res)=>{

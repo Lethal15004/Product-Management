@@ -14,8 +14,8 @@ module.exports.isAccessRoomChat = async(req,res,next)=>{
         }
         next();
     }catch(error){
-        req.flash('error','Lỗi server');
-        res.redirect('/users/friends');
+        req.flash('error','Lỗi');
+        res.redirect('/');
     }
     
 }
