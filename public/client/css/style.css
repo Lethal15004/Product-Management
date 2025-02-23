@@ -546,4 +546,8 @@
   font-weight: 600;
   margin-bottom: 3px;
 }
+
+.box-room [btn-leave-room] {
+  display: none;
+}
 /* End box-room */
